@@ -3,23 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>KEA Courses</title>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+<!-- insert student navbar-->
+<div th:replace="fragments/student-navmenu :: student-navmenu"/>
+
 <div class="container">
-    <h1>KEA courses</h1>
-    <hr>
-    <form action="#" th:action="@{/login}" th:object="${credentials}" method="post">
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="example@stud.kea.dk" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Password" required>
-        </div>
-        <button class="btn btn-dark" type="submit">Login</button>
-    </form>
+    <h1>My courses</h1>
+    <table th:if="${application.size() > 0}" class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Timestamp</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="application : ${application}">
+            <tr>
+                <td><span th:text="${application.course}"/>Example title</td>
+                <td><span th:text="${application.submittedAt}"/>01-01-2000 00:00:00</td>
+                <td><span th:text="${applicaiton.applicationStatus}"/>Pending</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <span th:unless="${applications.size() > 0}"><em>You have not signed up for any courses yet.</em></span>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
