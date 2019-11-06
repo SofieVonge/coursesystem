@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "requests")
-public class Request extends BaseEntity {
+public class Application extends BaseEntity {
 
     private Student student;
     private Course course;

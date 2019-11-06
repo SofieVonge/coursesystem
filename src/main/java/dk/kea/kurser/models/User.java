@@ -14,8 +14,6 @@ public abstract class User extends BaseEntity {
 
 
 
-    private Role role;
-
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
