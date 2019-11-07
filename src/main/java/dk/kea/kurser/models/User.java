@@ -19,10 +19,11 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<Application> applications = new HashSet<>();
 
-    public User(String firstName, String lastName, Role role) {
+    public User(String firstName, String lastName, Role role, Set<Application> applications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.applications = applications;
     }
 
     public User(){}
@@ -49,5 +50,13 @@ public class User extends BaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(Set<Application> applications) {
+        this.applications = applications;
     }
 }

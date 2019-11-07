@@ -20,7 +20,7 @@
         <tbody>
         <th:block th:each="application : ${applications}">
             <tr>
-                <td><span th:text="${application.contact.user}"/></td>
+                <td><span th:text="${application.user.firstName} + ' ' + ${application.user.lastName}"/></td>
                 <td><span th:text="${application.submittedAt}"/></td>
                 <td><a href="#" th:href="@{'/application/' + @{application.id} + '/accept'" role="button" class="btn btn-success">Accept</a></td>
                 <td><a href="#" th:href="@{'/application/' + @{application.id} + '/deny'}" role="button" class="btn btn-danger">Deny</a></td>
