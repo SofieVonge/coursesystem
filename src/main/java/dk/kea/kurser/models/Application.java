@@ -1,7 +1,7 @@
 package dk.kea.kurser.models;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "applications")
@@ -13,10 +13,19 @@ public class Application extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Course course;
 
-    private LocalDateTime submittedAt;
+    private Timestamp submittedAt;
 
     @Enumerated(value = EnumType.STRING)
     private ApplicationStatus applicationStatus;
+
+    public Application() { }
+
+    public Application(User student, Course course, Timestamp submittedAt, ApplicationStatus applicationStatus) {
+        this.student = student;
+        this.course = course;
+        this.submittedAt = submittedAt;
+        this.applicationStatus = applicationStatus;
+    }
 
     public User getStudent() {
         return student;
@@ -34,11 +43,11 @@ public class Application extends BaseEntity {
         this.course = course;
     }
 
-    public LocalDateTime getSubmittedAt() {
+    public Timestamp getSubmittedAt() {
         return submittedAt;
     }
 
-    public void setSubmittedAt(LocalDateTime submittedAt) {
+    public void setSubmittedAt(Timestamp submittedAt) {
         this.submittedAt = submittedAt;
     }
 
