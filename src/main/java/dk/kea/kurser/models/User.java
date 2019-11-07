@@ -11,6 +11,9 @@ public class User extends BaseEntity {
     @Column(name = "email", length = 20)
     private String email;
 
+    @Column(name = "secret", length = 32)
+    private String secret;
+
     @Column(name = "first_name", length = 20)
     private String firstName;
 
@@ -29,11 +32,15 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
     private Set<Course> teachingCourses = new HashSet<>(); //for teachers
 
-    public User(String firstName, String lastName, Role role, Set<Application> applications) {
+    public User(String email, String secret, String firstName, String lastName, Role role, Set<Application> applications, Set<Course> enrolledCourses, Set<Course> teachingCourses) {
+        this.email = email;
+        this.secret = secret;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
         this.applications = applications;
+        this.enrolledCourses = enrolledCourses;
+        this.teachingCourses = teachingCourses;
     }
 
     public User(){}
@@ -44,6 +51,14 @@ public class User extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     public String getFirstName() {
