@@ -28,5 +28,26 @@ public class Course extends BaseEntity
             inverseJoinColumns = { @JoinColumn(name = "user_id") } )
     private Set<User> teachers = new HashSet<>();
 
+    public Course() { }
 
+    public Course(Set<User> students, Set<User> teachers) {
+        this.students = students;
+        this.teachers = teachers;
+    }
+
+    public Set<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<User> students) {
+        this.students = students;
+    }
+
+    public Set<User> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<User> teachers) {
+        this.teachers = teachers;
+    }
 }
