@@ -4,8 +4,12 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Table(name = "users")
 public class User extends BaseEntity {
+
+    @Column(name = "email", length = 20)
+    private String email;
 
     @Column(name = "first_name", length = 20)
     private String firstName;
@@ -19,6 +23,12 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<Application> applications = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
+    private Set<Course> enrolledCourses = new HashSet<>(); //for students
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
+    private Set<Course> teachingCourses = new HashSet<>(); //for teachers
+
     public User(String firstName, String lastName, Role role, Set<Application> applications) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,6 +37,14 @@ public class User extends BaseEntity {
     }
 
     public User(){}
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -58,5 +76,21 @@ public class User extends BaseEntity {
 
     public void setApplications(Set<Application> applications) {
         this.applications = applications;
+    }
+
+    public Set<Course> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(Set<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
+
+    public Set<Course> getTeachingCourses() {
+        return teachingCourses;
+    }
+
+    public void setTeachingCourses(Set<Course> teachingCourses) {
+        this.teachingCourses = teachingCourses;
     }
 }

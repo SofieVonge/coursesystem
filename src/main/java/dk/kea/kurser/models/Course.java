@@ -8,18 +8,25 @@ import java.util.Set;
 @Table(name = "courses")
 public class Course extends BaseEntity
 {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "students__courses",
+            joinColumns = { @JoinColumn(name = "course_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") } )
+    private Set<User> students = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },
-            mappedBy = "courses")
-    private Set<Student> students = new HashSet<>();
+            })
+    @JoinTable(name = "teachers__courses",
+            joinColumns = { @JoinColumn(name = "course_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") } )
+    private Set<User> teachers = new HashSet<>();
 
 
 }
