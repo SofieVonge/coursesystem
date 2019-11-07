@@ -9,9 +9,9 @@
 <body>
 
 <!--fragment example (not tested) -->
-<div th:if="${role} == 'admin'" th:replace="fragments/admin-navmenu :: admin-navmenu"/>
-<div th:if="${role} == 'student'" th:replace="fragments/student-navmenu :: student-navmenu"/>
-<div th:if="${role} == 'teacher'" th:replace="fragments/teacher-navmenu :: teacher-navmenu"/>
+<div th:if="${user.role} == 'admin'" th:replace="fragments/admin-navmenu :: admin-navmenu"/>
+<div th:if="${user.role} == 'student'" th:replace="fragments/student-navmenu :: student-navmenu"/>
+<div th:if="${user.role} == 'teacher'" th:replace="fragments/teacher-navmenu :: teacher-navmenu"/>
 
 <div class="container">
     <h1>KEA courses</h1>

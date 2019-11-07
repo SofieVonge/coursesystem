@@ -11,13 +11,13 @@
 <div th:replace="fragments/student-navmenu :: student-navmenu"/>
 
 <div class="container">
-    <h1>My courses</h1>
+    <h1><span th:text="${user.firstName} + ' ' + ${user.lastName} + ' courses.'"/></h1>
     <table th:if="${application.size() > 0}" class="table">
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Timestamp</th>
-            <th>Status</th>
+            <th>Course</th>
+            <th>Time of submission</th>
+            <th>Application status</th>
         </tr>
         </thead>
         <tbody>

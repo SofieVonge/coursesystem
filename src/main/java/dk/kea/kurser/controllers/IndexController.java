@@ -1,7 +1,7 @@
 package dk.kea.kurser.controllers;
 
 import dk.kea.kurser.dto.Credentials;
-import dk.kea.kurser.models.Role;
+import dk.kea.kurser.models.User;
 import dk.kea.kurser.services.AuthService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ public class IndexController {
     @GetMapping(value = {"", "/", "/index", })
     public String getIndex(Model model, HttpSession session) {
         //if user is already logged in, redirect to the 'search course' site
-        if (session.getAttribute("role") != null) {
+        if (session.getAttribute("user") != null) {
             return "sites/course/search";
         }
 
@@ -35,15 +35,22 @@ public class IndexController {
 
     @PostMapping("/login")
     public String submitLogin(@ModelAttribute("credentials") Credentials credentials, HttpSession session) {
-        Role role = authService.authenticatedAs(credentials);
+        //authenticate as user from auth service
+        User user = authService.authenticatedAs(credentials);
 
-        //if role returned IS null, user was not authenticated
-        if (role == null) {
+        //if user returned IS null, user was not authenticated
+        if (user == null) {
             return "redirect:/";
         } else {
-            session.setAttribute("email", credentials.getEmail());
-            session.setAttribute("role", role);
-            return "/course/search";
+            session.setAttribute("user", user);
+            return "sites/course/search";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        //clear session then redirect to index
+        session.removeAttribute("user");
+        return "redirect:/";
     }
 }
