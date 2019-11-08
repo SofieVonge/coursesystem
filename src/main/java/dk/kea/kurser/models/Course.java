@@ -8,6 +8,15 @@ import java.util.Set;
 @Table(name = "courses")
 public class Course extends BaseEntity
 {
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "course")
+    private Set<Application> applications = new HashSet<>();
+
+
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
@@ -49,5 +58,13 @@ public class Course extends BaseEntity
 
     public void setTeachers(Set<User> teachers) {
         this.teachers = teachers;
+    }
+
+    public Set<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(Set<Application> applications) {
+        this.applications = applications;
     }
 }
