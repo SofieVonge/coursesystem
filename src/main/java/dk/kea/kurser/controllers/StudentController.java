@@ -41,4 +41,14 @@ public class StudentController {
 
         return "sites/application/signed-up";
     }
+
+    @GetMapping("/course/{id}/signup")
+    public String submitSignUp(@PathVariable("id") long id, HttpSession session) {
+
+        User user = (User)session.getAttribute("user");
+        studentService.signUpForCourse(user, id);
+
+        //redirect to the signed up site
+        return "redirect:/application/signed-up";
+    }
 }
