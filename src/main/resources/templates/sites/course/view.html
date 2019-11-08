@@ -12,7 +12,7 @@
 
 <div class="container">
     <h1>Course information</h1>
-    <table class="table">
+    <table class="table table-bordered">
         <tr>
             <th>Name of the course in Danish</th>
             <td><span th:text="${course.danishName}"/></td>
@@ -73,7 +73,7 @@
         <tr>
             <!-- also needs to support multiple options -->
             <th>Teachers</th>
-            <span th:text="${course.teachers}"/></td>
+            <td><span th:text="${course.teachers}"/></td>
         </tr>
     </table>
     <hr>
