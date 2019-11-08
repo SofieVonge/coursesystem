@@ -11,4 +11,5 @@ import java.util.Set;
 public interface ApplicationRepo extends CrudRepository<Application, Long> {
 
     public Set<Application> findByCourse(Course course);
+    public Set<Application> findByCourseOrderBySubmittedAtDesc(Course course);
 }

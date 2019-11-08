@@ -63,6 +63,21 @@ public class AdministrationService {
         return application.get();
     }
 
+    public Set<User> seeStudentsBasedOnApplicationForSpecificCourse(Course course)
+    {
+        Set<Application> applications = applicationRepo.findByCourseOrderBySubmittedAtDesc(course);
+        Set<User> students = new HashSet<>();
+
+        for(Application a : applications)
+        {
+            students.add(a.getStudent());
+        }
+
+        return students;
+
+    }
+
+    /* might need for later. See all students in a specific course
     public Set<User> seeStudentsBasedOnCourse(Course course)
     {
         Set<User> students = userRepository.findByEnrolledCourses(course);
@@ -72,5 +87,5 @@ public class AdministrationService {
         }
 
         return students;
-    }
+    }*/
 }
