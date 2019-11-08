@@ -20,8 +20,8 @@ public class IndexController {
         this.authService = authService;
     }
 
-    @GetMapping(value = {"", "/", "/index", })
-    public String getIndex(Model model, HttpSession session) {
+    @GetMapping(value = {"", "/", "/index"})
+    public String getLogin(Model model, HttpSession session) {
         //if user is already logged in, redirect to the 'search course' site
         if (session.getAttribute("user") != null) {
             return "sites/course/search";
@@ -42,7 +42,10 @@ public class IndexController {
         if (user == null) {
             return "redirect:/";
         } else {
+            //add authenticated user info to http session
             session.setAttribute("user", user);
+
+            //redirect to search course site
             return "sites/course/search";
         }
     }
