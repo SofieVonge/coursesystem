@@ -10,5 +10,5 @@ import java.util.Set;
 @Repository
 public interface CourseRepo extends CrudRepository<Course, Long> {
 
-    public Set<User> findByStudents(Course course);
+    public Set<User> findAllStudents(Course course);
 }
