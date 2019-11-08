@@ -38,10 +38,10 @@ public class AdministrationService {
 
     public Set<User> seeStudentsBasedOnCourse(Course course)
     {
-        Set<User> students = courseRepo.findAllStudents(course);
+        Set<User> students = userRepository.findByEnrolledCourses(course);
         if(students.isEmpty())
         {
-            throw new RuntimeException("No students found for course");
+            throw new RuntimeException("No students found for this course");
         }
 
         return students;
