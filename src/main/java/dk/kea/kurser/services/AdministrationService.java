@@ -32,7 +32,7 @@ public class AdministrationService {
     public Set<Application> findApplicationsByCourse(Course course)
     {
         Set<Application> applications = new HashSet<>();
-        for(Application a : applicationRepo.findByCourse(course))
+        for(Application a : applicationRepo.findByCourseOrderBySubmittedAtDesc(course))
         {
             applications.add(a);
         }
@@ -62,7 +62,7 @@ public class AdministrationService {
 
         return application.get();
     }
-
+/*
     public Set<User> seeStudentsBasedOnApplicationForSpecificCourse(Course course)
     {
         Set<Application> applications = applicationRepo.findByCourseOrderBySubmittedAtDesc(course);
@@ -75,7 +75,7 @@ public class AdministrationService {
 
         return students;
 
-    }
+    }*/
 
     /* might need for later. See all students in a specific course
     public Set<User> seeStudentsBasedOnCourse(Course course)

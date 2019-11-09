@@ -32,7 +32,11 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
     private Set<Course> teachingCourses = new HashSet<>(); //for teachers
 
-    public User(String email, String secret, String firstName, String lastName, Role role, Set<Application> applications, Set<Course> enrolledCourses, Set<Course> teachingCourses) {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+    private Set<Course> createdCourses;
+
+    public User(String email, String secret, String firstName, String lastName, Role role, Set<Application> applications, Set<Course> enrolledCourses,
+                Set<Course> createdCourses, Set<Course> teachingCourses) {
         this.email = email;
         this.secret = secret;
         this.firstName = firstName;
@@ -41,9 +45,18 @@ public class User extends BaseEntity {
         this.applications = applications;
         this.enrolledCourses = enrolledCourses;
         this.teachingCourses = teachingCourses;
+        this.createdCourses = createdCourses;
     }
 
     public User(){}
+
+    public Set<Course> getCreatedCourses() {
+        return createdCourses;
+    }
+
+    public void setCreatedCourses(Set<Course> createdCourses) {
+        this.createdCourses = createdCourses;
+    }
 
     public String getEmail() {
         return email;

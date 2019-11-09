@@ -49,13 +49,13 @@ public class AdministrationController {
     public String acceptApplication(@ModelAttribute Application application)
     {
         administrationService.approveApplication(application);
-        return "redirect:/"; //redirect to what?
+        return "redirect:/review"; //redirect to what?
     }
 
     @PostMapping("/deny")
     public String denyApplication(@ModelAttribute Application application)
     {
         administrationService.rejectApplication(application);
-        return "redirect:/"; //redirect to what?
+        return "redirect:/review"; //redirect to what?
     }
 }
