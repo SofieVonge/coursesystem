@@ -79,10 +79,14 @@ public class Course extends BaseEntity
     @Column(name = "title_danish")
     private String titleDanish;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User createdBy;
+
 
     public Course() { }
 
-    public Course(Set<Application> applications, Set<User> students, Set<User> teachers, Set<StudyProgram> studyPrograms, int semester, String classCode, boolean mandatory, int ects, String spokenLanguage, int studentsMin, int studentsMax, int studentsExpected, String prerequisites, String learningOutcome, String content, String learningActivities, String examForm, String titleEnglish, String titleDanish) {
+    public Course(Set<Application> applications, Set<User> students, Set<User> teachers, Set<StudyProgram> studyPrograms, int semester, String classCode, boolean mandatory, int ects, String spokenLanguage, int studentsMin, int studentsMax, int studentsExpected, String prerequisites, String learningOutcome, String content, String learningActivities, String examForm, String titleEnglish, String titleDanish, User createdBy) {
         this.applications = applications;
         this.students = students;
         this.teachers = teachers;
@@ -102,6 +106,7 @@ public class Course extends BaseEntity
         this.examForm = examForm;
         this.titleEnglish = titleEnglish;
         this.titleDanish = titleDanish;
+        this.createdBy = createdBy;
     }
 
     public Set<User> getStudents() {
@@ -254,5 +259,13 @@ public class Course extends BaseEntity
 
     public void setTitleDanish(String titleDanish) {
         this.titleDanish = titleDanish;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }
