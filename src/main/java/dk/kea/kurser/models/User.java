@@ -26,17 +26,19 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     private Set<Application> applications = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "students")
     private Set<Course> enrolledCourses = new HashSet<>(); //for students
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "users")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, mappedBy = "teachers")
     private Set<Course> teachingCourses = new HashSet<>(); //for teachers
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
     private Set<Course> createdCourses;
 
-    public User(String email, String secret, String firstName, String lastName, Role role, Set<Application> applications, Set<Course> enrolledCourses,
+    public User(String email, String secret, String firstName, String lastName, Role role,
+                Set<Application> applications, Set<Course> enrolledCourses,
                 Set<Course> createdCourses, Set<Course> teachingCourses) {
+
         this.email = email;
         this.secret = secret;
         this.firstName = firstName;
