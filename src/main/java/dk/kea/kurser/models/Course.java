@@ -38,7 +38,7 @@ public class Course extends BaseEntity
     private Set<User> teachers = new HashSet<>();
 
     @ElementCollection(targetClass = StudyProgram.class)
-    @CollectionTable(name = "courses__study_programs", joinColumns = @JoinColumn(name = "course_id"))
+    @CollectionTable(name = "courses__study_program", joinColumns = @JoinColumn(name = "course_id"))
     @Column(name = "study_program")
     private Set<StudyProgram> studyPrograms = new HashSet<>();
 
