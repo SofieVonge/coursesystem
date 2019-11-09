@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * @author Andreas Dan Petersen
+ * @since 09-11-2019
+ * @version 1.0
+ */
 @Controller
 public class IndexController {
 
@@ -20,6 +25,12 @@ public class IndexController {
         this.authService = authService;
     }
 
+    /**
+     * Get mapping for the index/login page
+     * @param model view model for the web site
+     * @param session the current http session
+     * @return a string leading to the html site path
+     */
     @GetMapping(value = {"", "/", "/index"})
     public String getLogin(Model model, HttpSession session) {
         //if user is already logged in, redirect to the 'search course' site
@@ -33,6 +44,12 @@ public class IndexController {
         return "sites/index";
     }
 
+    /**
+     * Post mapping for the login site
+     * @param credentials the credentials dto holding the authentication info
+     * @param session the current http session
+     * @return a string leading to the html site path
+     */
     @PostMapping("/login")
     public String submitLogin(@ModelAttribute("credentials") Credentials credentials, HttpSession session) {
         //authenticate as user from auth service
@@ -50,6 +67,11 @@ public class IndexController {
         }
     }
 
+    /**
+     * Get mapping for the logout feature
+     * @param session the http session
+     * @return a string leading to the index/login get mapping
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         //clear session then redirect to index

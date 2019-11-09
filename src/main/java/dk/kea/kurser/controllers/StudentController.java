@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpSession;
 import java.util.Set;
 
+/**
+ * @author Andreas Dan Petersen
+ * @since 09-11-2019
+ * @version 1.0
+ */
 @Controller
 public class StudentController {
 
@@ -21,6 +26,12 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    /**
+     * Get mapping for the 'view course' site
+     * @param id the path variable id to specify the course to view
+     * @param model the view model for site
+     * @return a string leading to the html site path
+     */
     @GetMapping("/course/{id}/view")
     public String getCourse(@PathVariable("id") long id, Model model) {
         //fetch course from service
@@ -31,6 +42,12 @@ public class StudentController {
         return "sites/course/view";
     }
 
+    /**
+     * Get mapping for the courses signed up overview site
+     * @param model the view model for the site
+     * @param session the current http session
+     * @return a string leading to the html site path
+     */
     @GetMapping("/application/signed-up")
     public String getSignedUp(Model model, HttpSession session) {
         User user = (User)session.getAttribute("user");
@@ -42,6 +59,12 @@ public class StudentController {
         return "sites/application/signed-up";
     }
 
+    /**
+     * Get mapping for the sign up site for a specific course
+     * @param id the id of the course
+     * @param session the http session
+     * @return a string leading to the html site path
+     */
     @GetMapping("/course/{id}/signup")
     public String submitSignUp(@PathVariable("id") long id, HttpSession session) {
 

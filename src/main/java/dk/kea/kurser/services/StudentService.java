@@ -12,6 +12,11 @@ import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * @author Andreas Dan Petersen
+ * @since 09-11-2019
+ * @version 1.0
+ */
 @Service
 public class StudentService {
 
@@ -23,15 +28,31 @@ public class StudentService {
         this.applicationRepo = applicationRepo;
     }
 
+    /**
+     * Finds a given course from a given id
+     * @param id the id of course to find
+     * @return the course that holds the specific id
+     */
     public Course findCourseById(long id) {
         Optional<Course> courses = courseRepo.findById(id);
         return courses.orElse(null);
     }
 
+    /**
+     * Finds a set of applications from a given user as author
+     * @param student the author of the application
+     * @return a set holding a collection of all applications with user as author
+     */
     public Set<Application> findApplicationsByUser(User student) {
         return applicationRepo.findByStudent(student);
     }
 
+    /**
+     * Signs up a user for a given course
+     * @param user the user that wishes to sign up for the course
+     * @param id the id of the course to sign up for
+     * @return a boolean value indicating whether or not the sign up was successful
+     */
     public boolean signUpForCourse(User user, long id) {
         try {
             //fetch course from id
