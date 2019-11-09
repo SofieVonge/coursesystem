@@ -1,4 +1,4 @@
-package dk.kea.kurser.models;
+package dk.kea.kurser.helpers;
 
 public class SearchCriteria
 {
@@ -7,16 +7,12 @@ public class SearchCriteria
     private Object value;
     private boolean orPredicate;
 
-    public SearchCriteria() {
-        key = "";
-        operation = "";
-        value = null;
-    }
 
     public SearchCriteria(String key, String operation, Object value) {
         this.key = key;
         this.operation = operation;
         this.value = value;
+        this.orPredicate = false;
     }
 
     public SearchCriteria(String key, String operation, Object value, boolean isOrPredicate) {

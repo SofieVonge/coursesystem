@@ -1,8 +1,6 @@
-package dk.kea.kurser.util;
+package dk.kea.kurser.helpers;
 
 import dk.kea.kurser.models.Course;
-import dk.kea.kurser.models.CourseSpecification;
-import dk.kea.kurser.models.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
