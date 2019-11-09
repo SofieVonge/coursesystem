@@ -10,9 +10,9 @@ public enum StudyProgram
     WEB_DEVELOPMENT("Web Development");
 
     @Transient
-    final String label;
+    public final String label;
 
-    StudyProgram(String label) {
+    StudyProgram(final String label) {
         this.label = label;
     }
 }
