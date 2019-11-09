@@ -1,5 +1,6 @@
-package dk.kea.kurser.models;
+package dk.kea.kurser.helpers;
 
+import dk.kea.kurser.models.Course;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
