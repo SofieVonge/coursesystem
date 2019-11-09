@@ -3,6 +3,8 @@ package dk.kea.kurser.repositories;
 import dk.kea.kurser.models.Application;
 import dk.kea.kurser.models.Course;
 import dk.kea.kurser.models.User;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +20,7 @@ import java.util.Set;
  * @see Course
  */
 @Repository
-public interface CourseRepo extends CrudRepository<Course, Long>
+public interface CourseRepo extends CrudRepository<Course, Long>, JpaSpecificationExecutor<Course>
 {
     /**
      * Find a set of courses by specified teacher
