@@ -26,7 +26,6 @@ public class AdministrationController {
 
 
     //this method shows all application belonging to a specific course
-    //should this be here or...? what should it return?
    @GetMapping("/course/{id}/application")
    public String showApplications(@PathVariable("id") Long id, Model model)
    {
@@ -37,25 +36,21 @@ public class AdministrationController {
    }
 
 
-   //this is setup for the postmapping, finding the one application to accept or deny
-   @GetMapping("/application/{id}")
-   public String handleApplication(@PathVariable("id") Long id, Model model)
-   {
-       model.addAttribute("application", administrationService.findApplicationById(id));
-       return "review"; //what should it return?
-   }
-
-    @PostMapping("/accept")
-    public String acceptApplication(@ModelAttribute Application application)
+   @GetMapping("/application/{id}/accept")
+    public String acceptApplication(@PathVariable("id") Long id)
     {
+        Application application = administrationService.findApplicationById(id);
         administrationService.approveApplication(application);
-        return "redirect:/review"; //redirect to what?
+        return "redirect:/review";
     }
 
-    @PostMapping("/deny")
-    public String denyApplication(@ModelAttribute Application application)
+    @GetMapping("/application/{id}/deny")
+    public String denyApplication(@PathVariable("id") Long id)
     {
+        Application application = administrationService.findApplicationById(id);
         administrationService.rejectApplication(application);
-        return "redirect:/review"; //redirect to what?
+        return "redirect:/review";
     }
+
+
 }
