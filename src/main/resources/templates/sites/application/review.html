@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container">
-    <h1><span th:text="${course}">Course</span></h1>
+    <h1><span th:text="'Review ' + ${course.titleEnglish} + ' applications'">Course</span></h1>
     <table th:if="${applications.size() > 0}" class="table">
         <thead>
         <tr>
@@ -22,7 +22,7 @@
             <tr>
                 <td><span th:text="${application.user.firstName} + ' ' + ${application.user.lastName}"/></td>
                 <td><span th:text="${application.submittedAt}"/></td>
-                <td><a href="#" th:href="@{'/application/' + @{application.id} + '/accept'" role="button" class="btn btn-success">Accept</a></td>
+                <td><a href="#" th:href="@{'/application/' + @{application.id} + '/accept'}" role="button" class="btn btn-success">Accept</a></td>
                 <td><a href="#" th:href="@{'/application/' + @{application.id} + '/deny'}" role="button" class="btn btn-danger">Deny</a></td>
             </tr>
         </th:block>
