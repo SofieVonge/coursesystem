@@ -9,16 +9,51 @@
 <body>
 
 <!--fragment example (not tested) -->
-<div th:replace="fragments/student-navmenu :: student-navmenu"/>
+<!--<div th:replace="fragments/student-navmenu :: student-navmenu"></div>-->
 
 <div class="container">
     <h1>KEA courses</h1>
     <hr>
-    <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-primary" type="submit">Search</button>
+    <form action="#" th:action="@{/course/search}" th:object="${courseSearch}" method="post">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input th:field="*{title}" type="text" class="form-control" id="title" />
+        </div>
+        <div class="form-group">
+            <div>
+                <input th:field="*{mandatory}" type="checkbox" id="mandatory">
+                <label for="mandatory">Mandatory</label>
+            </div>
+            <div>
+                <input th:field="*{elective}" type="checkbox" id="elective">
+                <label for="elective">Elective</label>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
     </form>
     <hr>
+    <table>
+    <th:block th:each="course : ${courseSearch.courses}">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Elective</th>
+                <th>ects</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>
+                <span th:text="${course.titleDanish}"></span>
+                <span>&nbsp;/&nbsp;</span>
+                <span th:text="${course.titleEnglish}"></span>
+            </td>
+            <td th:text="${course.mandatory} ? 'Mandatory' : 'Elective'"></td>
+            <td th:text="${course.ects}"></td>
+        </tr>
+    </th:block>
+    </table>
 
     <!-- insert table of results (from jquery) -->
 </div>
