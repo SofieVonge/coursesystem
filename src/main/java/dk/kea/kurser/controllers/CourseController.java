@@ -34,8 +34,7 @@ public class CourseController
     }
 
     @PostMapping("course/search")
-    public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model)
-    {
+    public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model) {
         // holds fetched courses
         List<Course> courses = new ArrayList<>();
         // final course specification
@@ -43,11 +42,15 @@ public class CourseController
         // will hold course specification fragments
         List<Specification<Course>> courseSpecificationsFragments = new ArrayList<>();
 
-        if(!courseSearch.getTitle().isEmpty())
+        // add title specification fragment
+        if (!courseSearch.getTitle().isEmpty())
             courseSpecificationsFragments.add(CourseSpecifications.titleLike(courseSearch.getTitle()));
 
-        if(courseSearch.isElective())
+        // add elective/mandatory specification fragment
+        if (courseSearch.isElective() && !courseSearch.isMandatory())
             courseSpecificationsFragments.add(CourseSpecifications.isElective());
+        else if(courseSearch.isMandatory() && !courseSearch.isElective())
+            courseSpecificationsFragments.add(CourseSpecifications.isMandatory());
 
         // add first search specification
         if(courseSpecificationsFragments.size() > 0)

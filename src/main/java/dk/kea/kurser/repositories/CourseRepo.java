@@ -28,7 +28,7 @@ public interface CourseRepo extends CrudRepository<Course, Long>, JpaSpecificati
      * @return a set of courses
      * @see Course
      */
-    Set<Course> findByTeacher(User teacher);
+    Set<Course> findByTeachersContaining(User teacher);
 
     /**
      * Find a set of courses by specified student
@@ -36,7 +36,7 @@ public interface CourseRepo extends CrudRepository<Course, Long>, JpaSpecificati
      * @return a set of courses
      * @see Course
      */
-    Set<Course> findByStudent(User student);
+    Set<Course> findByStudentsContaining(User student);
 
     /**
      * Find a courses by specified application
@@ -44,5 +44,5 @@ public interface CourseRepo extends CrudRepository<Course, Long>, JpaSpecificati
      * @return an optional Course
      * @see Course
      */
-    Optional<Course> findByApplication(Application application);
+    Optional<Course> findByApplicationsContaining(Application application);
 }

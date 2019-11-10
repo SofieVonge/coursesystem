@@ -51,4 +51,13 @@ public class CourseSpecifications
 
         return result;
     }
+
+    public static Specification<Course> isMandatory() {
+        Specification<Course> result = null;
+
+        result = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.isTrue(root.get("mandatory"));
+
+        return result;
+    }
 }
