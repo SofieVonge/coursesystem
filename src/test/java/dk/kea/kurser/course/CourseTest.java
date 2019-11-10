@@ -28,19 +28,19 @@ public class CourseTest
     @Test
     public void findCourseByPartialTitle_AllLocales() {
         // test title
-        String title = "est Tite";
+        String title = "est tite";
         Specification<Course> courseSpecification = CourseSpecifications.titleLike(title);
 
         // fetch list of courses from specification
         List<Course> courses = courseService.findAll(Specification.where(courseSpecification));
 
-        // assert stuff
+        // assert one of the titles in each course contains specified test title
     }
 
     @Test
     public void findCourseByPartialTitle_AllLocales_AndByEcts() {
         // test title
-        String title = "st tite";
+        String title = "est tite";
         // ects extrema
         int ectsMin = 10;
         int ectsMax = 20;
@@ -53,7 +53,22 @@ public class CourseTest
         // fetch list of courses from specification
         List<Course> courses = courseService.findAll(courseSpecification);
 
-        // assert stuff
+        // assert one of the titles in each course contains specified test title
+        // assert each course has ects value between specified ects extrema
+    }
+
+    @Test
+    public void findCourseByEcts() {
+        // ects points
+        int ects = 10;
+
+        // build specification query
+        Specification<Course> courseSpecification =
+                CourseSpecifications.ectsEquals(ects);
+
+        List<Course> courses = courseService.findAll(courseSpecification);
+
+        // assert all courses found has ects value that equals specified ects points.
     }
 
     @Test
@@ -61,6 +76,6 @@ public class CourseTest
         Pageable pageable = PageRequest.of(2, 40, Sort.by("id"));
         Page<Course> page = courseService.findAll(null, pageable);
 
-        // assert stuff
+        // assert stuff page-wise
     }
 }
