@@ -12,11 +12,11 @@ public class CourseSpecifications
 
         // danish title specification - title like given title
         Specification<Course> titleDanish = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("titleDanish"), title);
+                criteriaBuilder.like(root.get("titleDanish"), "%" + title + "%");
 
         // english title specification - title like given title
         Specification<Course> titleEnglish = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("titleEnglish"), title);
+                criteriaBuilder.like(root.get("titleEnglish"), "%" + title + "%");
 
         // concat specifications
         result = titleDanish.or(titleEnglish);
