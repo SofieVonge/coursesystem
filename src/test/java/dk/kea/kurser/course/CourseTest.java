@@ -27,14 +27,36 @@ public class CourseTest
 
     @Test
     public void findCourseByPartialTitle_AllLocales() {
-        String title = "Test Titel";
+        // test title
+        String title = "est Tite";
         Specification<Course> courseSpecification = CourseSpecifications.titleLike(title);
 
+        // fetch list of courses from specification
         List<Course> courses = courseService.findAll(Specification.where(courseSpecification));
 
         // assert stuff
     }
 
+    @Test
+    public void findCourseByPartialTitle_AllLocales_AndByEcts() {
+        // test title
+        String title = "st tite";
+        // ects extrema
+        int ectsMin = 10;
+        int ectsMax = 20;
+
+        // build specification query
+        Specification<Course> courseSpecification =
+                CourseSpecifications.titleLike(title)
+                .and(CourseSpecifications.ectsBetween(ectsMin, ectsMax));
+
+        // fetch list of courses from specification
+        List<Course> courses = courseService.findAll(courseSpecification);
+
+        // assert stuff
+    }
+
+    @Test
     public void findCoursesByPage() {
         Pageable pageable = PageRequest.of(2, 40, Sort.by("id"));
         Page<Course> page = courseService.findAll(null, pageable);
