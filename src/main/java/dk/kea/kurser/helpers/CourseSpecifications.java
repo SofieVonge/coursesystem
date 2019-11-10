@@ -3,24 +3,42 @@ package dk.kea.kurser.helpers;
 import dk.kea.kurser.models.Course;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 public class CourseSpecifications
 {
     public static Specification<Course> titleLike(String title) {
+        // specification result
         Specification<Course> result = null;
 
+        // danish title specification - title like given title
         Specification<Course> titleDanish = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.like(root.get("titleDanish"), title);
 
-        Specification titleEnglish = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
+        // english title specification - title like given title
+        Specification<Course> titleEnglish = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.like(root.get("titleEnglish"), title);
 
-        result = titleDanish;
-        result = result.or(titleEnglish);
+        // concat specifications
+        result = titleDanish.or(titleEnglish);
+
+        // return specification
+        return result;
+    }
+
+    public static Specification<Course> ectsBetween(int min, int max) {
+        Specification<Course> result = null;
+
+        result = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.between(root.get("ects"), min, max);
+
+        return result;
+    }
+
+    public static Specification<Course> ectsEquals(int ects) {
+        Specification<Course> result = null;
+
+        result = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("ects"), ects);
 
         return result;
     }
