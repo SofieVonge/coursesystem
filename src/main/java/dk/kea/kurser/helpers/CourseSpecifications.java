@@ -42,4 +42,13 @@ public class CourseSpecifications
 
         return result;
     }
+
+    public static Specification<Course> isElective() {
+        Specification<Course> result = null;
+
+        result = (Specification<Course>) (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.isFalse(root.get("mandatory"));
+
+        return result;
+    }
 }
