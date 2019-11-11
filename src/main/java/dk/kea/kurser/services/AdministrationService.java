@@ -3,32 +3,40 @@ package dk.kea.kurser.services;
 import dk.kea.kurser.models.Application;
 import dk.kea.kurser.models.ApplicationStatus;
 import dk.kea.kurser.models.Course;
-import dk.kea.kurser.models.User;
 import dk.kea.kurser.repositories.ApplicationRepo;
-import dk.kea.kurser.repositories.CourseRepo;
-import dk.kea.kurser.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * @author Sofie Vonge Jensen
+ * @since 11-11-2019
+ * @version 1
+ */
+
 @Service
 public class AdministrationService {
 
-    private UserRepository userRepository;
-    private CourseRepo courseRepo;
     private ApplicationRepo applicationRepo;
 
     public AdministrationService(){}
 
-    public AdministrationService(UserRepository userRepository, CourseRepo courseRepo, ApplicationRepo applicationRepo) {
-        this.userRepository = userRepository;
-        this.courseRepo = courseRepo;
+    /**
+     * Constructor with injected appicalionRepo
+     * @param applicationRepo
+     */
+    public AdministrationService(ApplicationRepo applicationRepo) {
         this.applicationRepo = applicationRepo;
     }
 
 
+    /**
+     * Finds all applications belonging to a specific course ordered by submitted at
+     * @param course
+     * @return all applications belonging to the specific course
+     */
     public Set<Application> findApplicationsByCourse(Course course)
     {
         Set<Application> applications = new HashSet<>();
@@ -39,18 +47,31 @@ public class AdministrationService {
         return applications;
     }
 
+    /**
+     * Approves the application and saves the new status to the repo
+     * @param application
+     */
     public void approveApplication(Application application)
     {
         application.setApplicationStatus(ApplicationStatus.ACCEPTED);
         applicationRepo.save(application);
     }
 
+    /**
+     * Rejects the application and saves the new status to the repo
+     * @param application
+     */
     public void rejectApplication(Application application)
     {
         application.setApplicationStatus(ApplicationStatus.REJECTED);
         applicationRepo.save(application);
     }
 
+    /**
+     * Finds an application by its id
+     * @param id
+     * @return the specific application
+     */
     public Application findApplicationById(Long id)
     {
         Optional<Application> application = applicationRepo.findById(id);
