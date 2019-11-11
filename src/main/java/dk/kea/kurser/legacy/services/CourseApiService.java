@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Service to make REST api calls for the course part of the system
+ *
+ * @author Andreas Dan Petersen
+ * @since 11-11-2019
+ * @version 1.0
+ */
 @Service
 public class CourseApiService {
 
@@ -19,13 +26,50 @@ public class CourseApiService {
         this.restUrl = restUrl;
     }
 
+    /**
+     * Fetches a list of all courses from the REST api service
+     * @return a list of all courses, an empty list is returned if none were fetched
+     */
     public List<Course> listAll() {
-        Course[] courses = restTemplate.getForEntity(restUrl + "/course", Course[].class).getBody();
+        Course[] courses = restTemplate.getForObject(restUrl + "/course", Course[].class);
 
         if (courses != null) {
             return Arrays.asList(courses);
         } else {
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * Adds a course to the REST api service
+     * @param course the course to add
+     */
+    public void addCourse(Course course) {
+        restTemplate.postForObject(restUrl + "/course", course, Course.class);
+    }
+
+    /**
+     * Fetches a course from the REST api service with a given id
+     * @param id the id of the course to fetch
+     * @return the course fetched
+     */
+    public Course findCourseById(int id) {
+        return restTemplate.getForObject(restUrl + "/course/" + id, Course.class);
+    }
+
+    /**
+     * Updates a course in the REST api service
+     * @param course the course to update
+     */
+    public void updateCourse(Course course) {
+        restTemplate.put(restUrl + "/course/" + course.getId(), course);
+    }
+
+    /**
+     * Deletes a course from the REST api service
+     * @param course the course to delete
+     */
+    public void deleteCourse(Course course) {
+        restTemplate.delete(restUrl + "/course/" + course.getId(), course);
     }
 }
