@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -30,5 +31,11 @@ public class CourseService
 
     public List<Course> findAll(Specification<Course> specification) {
         return courseRepository.findAll(specification);
+    }
+
+    public Course findById(Long id) {
+        Optional<Course> result = courseRepository.findById(id);
+
+        return result.orElse(null);
     }
 }
