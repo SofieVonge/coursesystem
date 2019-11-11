@@ -15,7 +15,7 @@ public class TeacherService {
     private CourseRepo courseRepo;
     private UserRepository userRepository;
 
-    public void creatCourse (Course course){
+    public void createCourse (Course course){
 
         courseRepo.save(course);
 
@@ -52,7 +52,7 @@ public class TeacherService {
     }
 
     //opretter en lærer
-    public void creatTeacher (User user){
+    public void createTeacher (User user){
 
         userRepository.save(user);
     }
