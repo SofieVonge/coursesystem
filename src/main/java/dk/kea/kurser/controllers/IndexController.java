@@ -57,7 +57,7 @@ public class IndexController {
         User user = authService.authenticatedAs(credentials);
 
         //if user returned IS null, user was not authenticated
-        if (user == null) {
+        if (user == null)
             return "redirect:/";
 
         if(user.getRole() != Role.STUDENT)
