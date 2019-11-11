@@ -1,6 +1,8 @@
 package dk.kea.kurser.legacy.services;
 
 import dk.kea.kurser.legacy.models.Course;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -71,5 +73,17 @@ public class CourseApiService {
      */
     public void deleteCourse(Course course) {
         restTemplate.delete(restUrl + "/course/" + course.getId(), course);
+    }
+
+    /**
+     * Checks if the REST api service has a course with a given id
+     * @param id the id of the course to check
+     * @return true if the course exists, false if not
+     */
+    public boolean courseExists(int id) {
+        //fetch resources as a simple string
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(restUrl + "/course/exist/" + id, String.class);
+        //if status code is 204/no content, assume it exists
+        return responseEntity.getStatusCode() == HttpStatus.NO_CONTENT;
     }
 }
