@@ -25,7 +25,7 @@ public class CourseApiService {
         if (courses != null) {
             return Arrays.asList(courses);
         } else {
-            return new ArrayList<Course>();
+            return new ArrayList<>();
         }
     }
 }
