@@ -1,6 +1,7 @@
 package dk.kea.kurser.controllers;
 
 import dk.kea.kurser.dto.Credentials;
+import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.services.AuthService;
 import org.springframework.stereotype.Controller;
@@ -58,13 +59,15 @@ public class IndexController {
         //if user returned IS null, user was not authenticated
         if (user == null) {
             return "redirect:/";
-        } else {
-            //add authenticated user info to http session
-            session.setAttribute("user", user);
 
-            //redirect to search course site
-            return "sites/course/search";
-        }
+        if(user.getRole() != Role.STUDENT)
+            return "redirect:/";
+
+        //add authenticated user info to http session
+        session.setAttribute("user", user);
+
+        //redirect to search course site
+        return "sites/course/search";
     }
 
     /**
