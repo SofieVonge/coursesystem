@@ -20,6 +20,8 @@ public class Course implements Serializable
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private final static long serialVersionUID = -8968126658931647369L;
 
+    public Course() { }
+
     public String getDescription() {
         return description;
     }
@@ -108,4 +110,20 @@ public class Course implements Serializable
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "description='" + description + '\'' +
+                ", ects='" + ects + '\'' +
+                ", id=" + id +
+                ", languange='" + languange + '\'' +
+                ", mandatory=" + mandatory +
+                ", name='" + name + '\'' +
+                ", namedanish='" + namedanish + '\'' +
+                ", numberOfTeachers=" + numberOfTeachers +
+                ", semester=" + semester +
+                ", studyprogramme='" + studyprogramme + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

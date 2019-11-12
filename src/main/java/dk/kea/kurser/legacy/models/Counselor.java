@@ -15,6 +15,8 @@ public class Counselor implements Serializable {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private final static long serialVersionUID = -2608748563411318231L;
 
+    public Counselor() { }
+
     public String getEmail() {
         return email;
     }
@@ -61,5 +63,17 @@ public class Counselor implements Serializable {
 
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    @Override
+    public String toString() {
+        return "Counselor{" +
+                "email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", id=" + id +
+                ", lastname='" + lastname + '\'' +
+                ", students=" + students +
+                ", additionalProperties=" + additionalProperties +
+                '}';
     }
 }

@@ -13,6 +13,8 @@ public class Teacher implements Serializable
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private final static long serialVersionUID = -2889069479010821497L;
 
+    public Teacher() { }
+
     public String getEmail() {
         return email;
     }
@@ -45,4 +47,13 @@ public class Teacher implements Serializable
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "email='" + email + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }
