@@ -30,7 +30,7 @@ public class StudentApiService {
      * Fetches a list of all students from the REST api service
      * @return a list of all students, an empty list is returned if none were fetched
      */
-    public List<Student> findAll() {
+    public List<Student> listAll() {
         Student[] students = restTemplate.getForObject(restUrl + "/student", Student[].class);
 
         if (students != null) {
