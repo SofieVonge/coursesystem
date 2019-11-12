@@ -18,6 +18,37 @@ class CourseApiServiceTest {
     @Test
     void listAll() {
         List<Course> courses = courseApiService.listAll();
+        System.out.println(courses);
+
         assertNotNull(courses);
     }
+
+    @Test
+    void addCourse() {
+
+    }
+
+    @Test
+    void findCourseById() {
+        for (int i = 0; i < 10; i++) {
+            try {
+                if (courseApiService.courseExists(i)) {
+                    Course course = courseApiService.findCourseById(i);
+                    System.out.println(course);
+                    assertNotNull(course);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+        }
+    }
+
+    @Test
+    void updateCourse() {
+    }
+
+    @Test
+    void deleteCourse() {
+    }
+
 }
