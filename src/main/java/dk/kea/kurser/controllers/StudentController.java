@@ -2,6 +2,7 @@ package dk.kea.kurser.controllers;
 
 import dk.kea.kurser.models.Application;
 import dk.kea.kurser.models.Course;
+import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.services.StudentService;
 import org.springframework.stereotype.Controller;
@@ -33,13 +34,22 @@ public class StudentController {
      * @return a string leading to the html site path
      */
     @GetMapping("/course/{id}/view")
-    public String getCourse(@PathVariable("id") long id, Model model) {
-        //fetch course from service
-        Course course = studentService.findCourseById(id);
-        //add to view model
-        model.addAttribute("course", course);
+    public String getCourse(@PathVariable("id") long id, Model model, HttpSession session) {
 
-        return "sites/course/view";
+        User user = (User)session.getAttribute("user");
+
+        if (user != null) {
+            if (user.getRole().equals(Role.STUDENT)) {
+                //fetch course from service
+                Course course = studentService.findCourseById(id);
+                //add to view model
+                model.addAttribute("course", course);
+
+                return "sites/course/view";
+            }
+        }
+
+        return "redirect:/";
     }
 
     /**
@@ -51,12 +61,19 @@ public class StudentController {
     @GetMapping("/application/signed-up")
     public String getSignedUp(Model model, HttpSession session) {
         User user = (User)session.getAttribute("user");
-        Set<Application> applications = studentService.findApplicationsByUser(user);
 
-        model.addAttribute("user", user);
-        model.addAttribute("applications", applications);
+        if (user != null) {
+            if (user.getRole().equals(Role.STUDENT)) {
+                Set<Application> applications = studentService.findApplicationsByUser(user);
 
-        return "sites/application/signed-up";
+                model.addAttribute("user", user);
+                model.addAttribute("applications", applications);
+
+                return "sites/application/signed-up";
+            }
+        }
+
+        return "redirect:/";
     }
 
     /**
@@ -69,9 +86,17 @@ public class StudentController {
     public String submitSignUp(@PathVariable("id") long id, HttpSession session) {
 
         User user = (User)session.getAttribute("user");
-        studentService.signUpForCourse(user, id);
 
-        //redirect to the signed up site
-        return "redirect:/application/signed-up";
+        if (user != null) {
+            if (user.getRole().equals(Role.STUDENT)) {
+
+                studentService.signUpForCourse(user, id);
+
+                //redirect to the signed up site
+                return "redirect:/application/signed-up";
+            }
+        }
+
+        return "redirect:/";
     }
 }
