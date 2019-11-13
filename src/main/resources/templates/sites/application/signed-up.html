@@ -11,8 +11,9 @@
 <div th:replace="fragments/student-navmenu :: student-navmenu"/>
 
 <div class="container">
-    <h1><span th:text="${user.firstName} + ' ' + ${user.lastName} + ' courses.'"/></h1>
-    <table th:if="${application.size() > 0}" class="table">
+    <h1><span th:text="'Courses for ' + ${user.firstName} + ' ' + ${user.lastName}"/></h1>
+    <hr>
+    <table th:if="${applicationList.size() > 0}" class="table">
         <thead>
         <tr>
             <th>Course</th>
@@ -21,17 +22,17 @@
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="application : ${application}">
+        <th:block th:each="user_application : ${applicationList}">
             <tr>
-                <td><span th:text="${application.course}"/>Example title</td>
-                <td><span th:text="${application.submittedAt}"/>01-01-2000 00:00:00</td>
-                <td><span th:text="${applicaiton.applicationStatus}"/>Pending</td>
+                <td><span th:text="${user_application.course}"/>Example title</td>
+                <td><span th:text="${user_application.submittedAt}"/>01-01-2000 00:00:00</td>
+                <td><span th:text="${user_applicaiton.applicationStatus}"/>Pending</td>
             </tr>
         </th:block>
         </tbody>
     </table>
 
-    <span th:unless="${applications.size() > 0}"><em>You have not signed up for any courses yet.</em></span>
+    <span th:unless="${applicationList.size() > 0}"><em>You have not signed up for any courses yet.</em></span>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

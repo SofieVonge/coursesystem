@@ -8,8 +8,17 @@
 </head>
 <body>
 
-<!--fragment example (not tested) -->
-<!--<div th:replace="fragments/student-navmenu :: student-navmenu"></div>-->
+<th:block th:if="${user.role.name()} == 'STUDENT'">
+    <div th:replace="fragments/student-navmenu :: student-navmenu"></div>
+</th:block>
+
+<th:block th:if="${user.role.name()} == 'TEACHER'">
+    <div th:replace="fragments/teacher-navmenu :: teacher-navmenu"></div>
+</th:block>
+
+<th:block th:if="${user.role.name()} == 'ADMINISTRATOR'">
+    <div th:replace="fragments/admin-navmenu :: admin-navmenu"></div>
+</th:block>
 
 <div class="container">
     <h1>KEA courses</h1>
