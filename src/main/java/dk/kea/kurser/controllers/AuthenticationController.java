@@ -1,9 +1,8 @@
 package dk.kea.kurser.controllers;
 
 import dk.kea.kurser.dto.Credentials;
-import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.User;
-import dk.kea.kurser.services.AuthService;
+import dk.kea.kurser.services.AuthenticationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,17 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Controller that handles the session authentication
+ *
  * @author Andreas Dan Petersen
  * @since 09-11-2019
  * @version 1.0
  */
 @Controller
-public class IndexController {
+public class AuthenticationController {
 
-    private AuthService authService;
+    private AuthenticationService authenticationService;
 
-    public IndexController(AuthService authService) {
-        this.authService = authService;
+    public AuthenticationController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     /**
@@ -54,7 +55,7 @@ public class IndexController {
     @PostMapping("/login")
     public String submitLogin(@ModelAttribute("credentials") Credentials credentials, HttpSession session) {
         //authenticate as user from auth service
-        User user = authService.authenticatedAs(credentials);
+        User user = authenticationService.authenticatedAs(credentials);
 
         //if user returned IS null, user was not authenticated
         if (user == null)

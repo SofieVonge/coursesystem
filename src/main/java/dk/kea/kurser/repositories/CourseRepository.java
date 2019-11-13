@@ -20,7 +20,7 @@ import java.util.Set;
  * @see Course
  */
 @Repository
-public interface CourseRepo extends CrudRepository<Course, Long>, JpaSpecificationExecutor<Course>
+public interface CourseRepository extends CrudRepository<Course, Long>, JpaSpecificationExecutor<Course>
 {
     /**
      * Find a set of courses by specified teacher

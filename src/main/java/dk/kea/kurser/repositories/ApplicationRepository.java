@@ -16,7 +16,7 @@ import java.util.Set;
 
 
 @Repository
-public interface ApplicationRepo extends CrudRepository<Application, Long> {
+public interface ApplicationRepository extends CrudRepository<Application, Long> {
 
     public Set<Application> findByCourse(Course course);
 

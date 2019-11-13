@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 @Service
-public class AuthService {
+public class AuthenticationService {
 
     private UserRepository userRepository;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthenticationService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
