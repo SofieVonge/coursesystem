@@ -36,7 +36,7 @@ public class IndexController {
     public String getLogin(Model model, HttpSession session) {
         //if user is already logged in, redirect to the 'search course' site
         if (session.getAttribute("user") != null) {
-            return "sites/course/search";
+            return "redirect:/course/search";
         }
 
         //add credentials dto to model
@@ -60,14 +60,11 @@ public class IndexController {
         if (user == null)
             return "redirect:/";
 
-        if(user.getRole() != Role.STUDENT)
-            return "redirect:/";
-
         //add authenticated user info to http session
         session.setAttribute("user", user);
 
         //redirect to search course site
-        return "sites/course/search";
+        return "redirect:/course/search";
     }
 
     /**
