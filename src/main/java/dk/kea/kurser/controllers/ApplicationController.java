@@ -32,7 +32,7 @@ public class ApplicationController {
      * @param session
      * @return review site
      */
-    @GetMapping("/course/{id}/application")
+    @GetMapping("/course/{id}/applications")
     public String showApplications(@PathVariable("id") Long id, Model model, HttpSession session)
     {
         //gets the user
@@ -47,8 +47,9 @@ public class ApplicationController {
                 Course course = courseService.findById(id);
                 //then we get the applications to that course
                 //SHOULD WE ALSO ONLY FIND ONES WHICH STATUS ARE PENDING?
-                model.addAttribute("applications", applicationService.findApplicationsByCourse(course));
-                return "review";
+                model.addAttribute("course", course);
+                model.addAttribute("applicationList", applicationService.findApplicationsByCourse(course));
+                return "sites/application/review";
             }
         }
         return "redirect:/";
@@ -148,7 +149,7 @@ public class ApplicationController {
                 Set<Application> applications = applicationService.findApplicationsByUser(user);
 
                 model.addAttribute("user", user);
-                model.addAttribute("applications", applications);
+                model.addAttribute("applicationList", applications);
 
                 return "sites/application/signed-up";
             }

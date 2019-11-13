@@ -4,10 +4,7 @@ import dk.kea.kurser.models.Course;
 import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.StudyProgram;
 import dk.kea.kurser.models.User;
-import dk.kea.kurser.services.StudentService;
-import dk.kea.kurser.services.TeacherService;
 import dk.kea.kurser.services.UserService;
-import org.hibernate.mapping.Collection;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,11 +15,9 @@ import java.util.HashSet;
 public class TestController
 {
     private UserService userService;
-    private TeacherService teacherService;
 
-    public TestController(UserService userService, TeacherService teacherService) {
+    public TestController(UserService userService) {
         this.userService = userService;
-        this.teacherService = teacherService;
     }
 
     @GetMapping("test/student/new")

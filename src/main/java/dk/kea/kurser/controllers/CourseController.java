@@ -30,10 +30,17 @@ public class CourseController
     }
 
     @GetMapping("course/search")
-    public String displaySearch(Model model) {
-        model.addAttribute("courseSearch", new CourseSearch());
+    public String displaySearch(Model model, HttpSession session) {
 
-        return "sites/course/search";
+        User user = (User)session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("courseSearch", new CourseSearch());
+            //add user to view model to correctly display nav menu
+            model.addAttribute("user", user);
+            return "sites/course/search";
+        }
+
+        return "redirect:/";
     }
 
     @PostMapping("course/search")
