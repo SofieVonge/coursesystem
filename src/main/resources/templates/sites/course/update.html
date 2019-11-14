@@ -15,6 +15,7 @@
     <th:block th:if="${course != null}">
     <form action="#" th:action="@{/course/${course.id}/update}" method="post">
         <input type="hidden" name= "id" th:value="${course.id}" />
+        <!-- <input type="text" name= "teacher" placeholder= "Teacher" />-->
         <div>
             <!-- model should provide a list teachers (mb from legacy system??) -->
             add / remove teachers
@@ -23,7 +24,7 @@
             <!-- model should provide study programs -->
             add / remove study programs
         </div>
-        <input type="text" name= "semester" placeholder= "Semester" th:value="${course.semester}" class="form-control">
+        <input type="number" name= "semester" placeholder= "Semester" min="0" step="1" th:value="${course.semester}" class="form-control">
         <input type="text" name= "classCode" placeholder= "Class code" th:value="${course.classCode}" class="form-control">
         <div class="group">
             <input type="checkbox" id="mandatory" name="mandatory" th:checked="${course.mandatory}" />
@@ -31,9 +32,9 @@
         </div>
         <input type="number" name= "ects" step="5" th:value="${course.ects}" class="form-control" />
         <input type="text" name= "spokenLanguage" placeholder= "Spoken language" th:value="${course.spokenLanguage}" class="form-control" />
-        <input type="text" name= "studentsMin" placeholder= "Students min" th:value="${course.studentsMin}" class="form-control" />
-        <input type="text" name= "studentsMax" placeholder= "Students max" th:value="${course.studentsMax}" class="form-control" />
-        <input type="text" name= "studentsExpected" placeholder= "Students Expected" th:value="${course.studentsExpected}" class="form-control" />
+        <input type="number" name= "studentsMin" placeholder= "Students min" min="0" step="1" th:value="${course.studentsMin}" class="form-control" />
+        <input type="number" name= "studentsMax" placeholder= "Students max" min="0" step="1" th:value="${course.studentsMax}" class="form-control" />
+        <input type="number" name= "studentsExpected" placeholder= "Students Expected" min="0" step="1" th:value="${course.studentsExpected}" class="form-control" />
         <input type="text" name= "prerequisites" placeholder= "Prerequisites" th:value="${course.prerequisites}" class="form-control" />
         <input type="text" name= "learningOutcome" placeholder= "Learning outcome" th:value="${course.learningOutcome}" class="form-control" />
         <input type="text" name= "content" placeholder= "Content" th:value="${course.content}" class="form-control" />

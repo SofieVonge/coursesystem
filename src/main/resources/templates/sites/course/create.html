@@ -13,33 +13,34 @@
     <h1>Create course</h1>
 
 
-    <form action="/create" method="post">
-        <div class="form-group">
+    <form action="#" th:action="@{/course/create}" method="post">
+        <!-- <input type="text" name= "teacher" placeholder= "Teacher" />-->
+        <div>
             <!-- model should provide a list teachers (mb from legacy system??) -->
             add / remove teachers
         </div>
-        <div class="form-group">
+        <div>
             <!-- model should provide study programs -->
             add / remove study programs
         </div>
-        <input type="text" name= "semester" placeholder= "Semester" th:value="${course.semester}" class="form-control">
-        <input type="text" name= "classCode" placeholder= "Class code" th:value="${course.classCode}" class="form-control">
+        <input type="number" name= "semester" placeholder= "Semester" min="0" step="1" class="form-control">
+        <input type="text" name= "classCode" placeholder= "Class code" class="form-control">
         <div class="group">
-            <input type="checkbox" id="mandatory" name="mandatory" th:checked="${course.mandatory}" />
+            <input type="checkbox" id="mandatory" name="mandatory" />
             <label for="mandatory">Mandatory</label>
         </div>
-        <input type="number" name= "ects" step="5" th:value="${course.ects}" class="form-control" />
-        <input type="text" name= "spokenLanguage" placeholder= "Spoken language" th:value="${course.spokenLanguage}" class="form-control" />
-        <input type="text" name= "studentsMin" placeholder= "Students min" th:value="${course.studentsMin}" class="form-control" />
-        <input type="text" name= "studentsMax" placeholder= "Students max" th:value="${course.studentsMax}" class="form-control" />
-        <input type="text" name= "studentsExpected" placeholder= "Students Expected" th:value="${course.studentsExpected}" class="form-control" />
-        <input type="text" name= "prerequisites" placeholder= "Prerequisites" th:value="${course.prerequisites}" class="form-control" />
-        <input type="text" name= "learningOutcome" placeholder= "Learning outcome" th:value="${course.learningOutcome}" class="form-control" />
-        <input type="text" name= "content" placeholder= "Content" th:value="${course.content}" class="form-control" />
-        <input type="text" name= "learningActivities" placeholder= "Learning activities" th:value="${course.learningActivities}" class="form-control" />
-        <input type="text" name= "examForm" placeholder= "Exam Form" th:value="${course.examForm}" class="form-control" />
-        <input type="text" name= "titleEnglish" placeholder= "Title English" th:value="${course.titleEnglish}" class="form-control" />
-        <input type="text" name= "titleDanish" placeholder= "Title Danish" th:value="${course.titleDanish}" class="form-control" />
+        <input type="number" name= "ects" step="5" class="form-control" />
+        <input type="text" name= "spokenLanguage" placeholder= "Spoken language" class="form-control" />
+        <input type="number" name= "studentsMin" placeholder= "Students min" min="0" step="1" class="form-control" />
+        <input type="number" name= "studentsMax" placeholder= "Students max" min="0" step="1" class="form-control" />
+        <input type="number" name= "studentsExpected" placeholder= "Students Expected" min="0" step="1" class="form-control" />
+        <input type="text" name= "prerequisites" placeholder= "Prerequisites" class="form-control" />
+        <input type="text" name= "learningOutcome" placeholder= "Learning outcome" class="form-control" />
+        <input type="text" name= "content" placeholder= "Content" class="form-control" />
+        <input type="text" name= "learningActivities" placeholder= "Learning activities" class="form-control" />
+        <input type="text" name= "examForm" placeholder= "Exam Form" class="form-control" />
+        <input type="text" name= "titleEnglish" placeholder= "Title English" class="form-control" />
+        <input type="text" name= "titleDanish" placeholder= "Title Danish" class="form-control" />
 
 
         <button class="btn btn-dark" type="submit">Create Course</button>
