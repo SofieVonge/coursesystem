@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create Course</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
+<div class="container">
+    <h1>Update course</h1>
+
+    <th:block th:if="${course != null}">
+    <form action="#" th:action="@{/course/${course.id}/update}" method="post">
+        <input type="hidden" name= "id" th:value="${course.id}" />
+        <div>
+            <!-- model should provide a list teachers (mb from legacy system??) -->
+            add / remove teachers
+        </div>
+        <div>
+            <!-- model should provide study programs -->
+            add / remove study programs
+        </div>
+        <input type="text" name= "semester" placeholder= "Semester" th:value="${course.semester}" class="form-control">
+        <input type="text" name= "classCode" placeholder= "Class code" th:value="${course.classCode}" class="form-control">
+        <div class="group">
+            <input type="checkbox" id="mandatory" name="mandatory" th:checked="${course.mandatory}" />
+            <label for="mandatory">Mandatory</label>
+        </div>
+        <input type="number" name= "ects" step="5" th:value="${course.ects}" class="form-control" />
+        <input type="text" name= "spokenLanguage" placeholder= "Spoken language" th:value="${course.spokenLanguage}" class="form-control" />
+        <input type="text" name= "studentsMin" placeholder= "Students min" th:value="${course.studentsMin}" class="form-control" />
+        <input type="text" name= "studentsMax" placeholder= "Students max" th:value="${course.studentsMax}" class="form-control" />
+        <input type="text" name= "studentsExpected" placeholder= "Students Expected" th:value="${course.studentsExpected}" class="form-control" />
+        <input type="text" name= "prerequisites" placeholder= "Prerequisites" th:value="${course.prerequisites}" class="form-control" />
+        <input type="text" name= "learningOutcome" placeholder= "Learning outcome" th:value="${course.learningOutcome}" class="form-control" />
+        <input type="text" name= "content" placeholder= "Content" th:value="${course.content}" class="form-control" />
+        <input type="text" name= "learningActivities" placeholder= "Learning activities" th:value="${course.learningActivities}" class="form-control" />
+        <input type="text" name= "examForm" placeholder= "Exam Form" th:value="${course.examForm}" class="form-control" />
+        <input type="text" name= "titleEnglish" placeholder= "Title English" th:value="${course.titleEnglish}" class="form-control" />
+        <input type="text" name= "titleDanish" placeholder= "Title Danish" th:value="${course.titleDanish}" class="form-control" />
+
+
+        <button class="btn btn-dark" type="submit">Update Course</button>
+
+    </form>
+    </th:block>
+
+    <th:block th:if="${course == null}">
+        The course you want you update was not found.
+    </th:block>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
