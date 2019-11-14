@@ -12,7 +12,7 @@
 <div class="container">
     <h1>Create course</h1>
 
-
+    <div>
     <form action="#" th:action="@{/course/create}" method="post">
         <!-- <input type="text" name= "teacher" placeholder= "Teacher" />-->
         <div>
@@ -23,29 +23,78 @@
             <!-- model should provide study programs -->
             add / remove study programs
         </div>
-        <input type="number" name= "semester" placeholder= "Semester" min="0" step="1" class="form-control">
-        <input type="text" name= "classCode" placeholder= "Class code" class="form-control">
-        <div class="group">
+        <div class="form-group">
+            <label for="semester">Semester:</label>
+            <input type="number" id="semester" name= "semester" placeholder= "0" min="0" step="1" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="classCode">Class code:</label>
+            <input type="text" id="classCode" name= "classCode" placeholder= "Class code" class="form-control" />
+        </div>
+
+        <div class="form-group">
             <input type="checkbox" id="mandatory" name="mandatory" />
             <label for="mandatory">Mandatory</label>
         </div>
-        <input type="number" name= "ects" step="5" class="form-control" />
-        <input type="text" name= "spokenLanguage" placeholder= "Spoken language" class="form-control" />
-        <input type="number" name= "studentsMin" placeholder= "Students min" min="0" step="1" class="form-control" />
-        <input type="number" name= "studentsMax" placeholder= "Students max" min="0" step="1" class="form-control" />
-        <input type="number" name= "studentsExpected" placeholder= "Students Expected" min="0" step="1" class="form-control" />
-        <input type="text" name= "prerequisites" placeholder= "Prerequisites" class="form-control" />
-        <input type="text" name= "learningOutcome" placeholder= "Learning outcome" class="form-control" />
-        <input type="text" name= "content" placeholder= "Content" class="form-control" />
-        <input type="text" name= "learningActivities" placeholder= "Learning activities" class="form-control" />
-        <input type="text" name= "examForm" placeholder= "Exam Form" class="form-control" />
-        <input type="text" name= "titleEnglish" placeholder= "Title English" class="form-control" />
-        <input type="text" name= "titleDanish" placeholder= "Title Danish" class="form-control" />
+        <div class="form-group">
+            <label for="ects">Ects:</label>
+            <input type="number" id="ects" name= "ects" step="5" placeholder="0" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="spokenLanguage">Spoken language:</label>
+            <input type="text" id="spokenLanguage" name= "spokenLanguage" placeholder= "Spoken language" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="studentsMin">Students min:</label>
+            <input type="number" id="studentsMin" name= "studentsMin" placeholder= "0" min="0" step="1" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="studentsMax">Students max:</label>
+            <input type="number" id="studentsMax" name= "studentsMax" placeholder= "0" min="0" step="1" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="studentsExpected">Students expected:</label>
+            <input type="number" id="studentsExpected" name= "studentsExpected" placeholder= "0" min="0" step="1" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="prerequisites">Prerequisites:</label>
+            <input type="text" id="prerequisites" name= "prerequisites" placeholder= "Prerequisites" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="learningOutcome">Learning outcome:</label>
+            <textarea type="text" id="learningOutcome" name= "learningOutcome" placeholder= "Learning outcome" class="form-control" >
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea type="text" id="Content" name= "content" placeholder= "Content" class="form-control" >
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label for="learningActivities">Content:</label>
+            <textarea type="text" id="learningActivities" name= "learningActivities" placeholder= "Learning activities" class="form-control" >
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label for="examForm">Exam form:</label>
+            <input type="text" id="examForm" name= "examForm" placeholder= "Exam Form" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="titleEnglish">Title <sub>(english)</sub></label>
+            <input type="text" id="titleEnglish" name= "titleEnglish" placeholder= "Title English" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="titleDanish">Title <sub>(danish)</sub></label>
+            <input type="text" id="titleDanish" name= "titleDanish" placeholder= "Title Danish" class="form-control" />
+        </div>
 
+        <div class="form-group">
+            <button class="btn btn-dark" type="submit">Create Course</button>
+        </div>
 
-        <button class="btn btn-dark" type="submit">Create Course</button>
 
     </form>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
