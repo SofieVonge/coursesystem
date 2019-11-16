@@ -31,13 +31,22 @@ public class ApplicationService {
     /**
      * Finds all applications belonging to a specific course ordered by submitted at
      * @param course
-     * @return all applications belonging to the specific course
+     * @return all applications belonging to the specific course with status PENDING
      */
     public Set<Application> findApplicationsByCourse(Course course)
     {
-        Set<Application> applications = new HashSet<>();
-        applications.addAll(applicationRepository.findByCourseOrderBySubmittedAtDesc(course));
-        return applications;
+        Set<Application> allApplications = applicationRepository.findByCourseOrderBySubmittedAtDesc(course);
+        Set<Application> pendingApplications = new HashSet<>();
+
+       for(Application a : allApplications)
+       {
+           if(a.getApplicationStatus().equals(ApplicationStatus.PENDING))
+           {
+               pendingApplications.add(a);
+           }
+       }
+
+        return pendingApplications;
     }
 
     /**

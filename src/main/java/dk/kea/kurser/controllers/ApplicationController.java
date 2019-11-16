@@ -46,7 +46,6 @@ public class ApplicationController {
                 //first we find the course
                 Course course = courseService.findById(id);
                 //then we get the applications to that course
-                //SHOULD WE ALSO ONLY FIND ONES WHICH STATUS ARE PENDING?
                 model.addAttribute("course", course);
                 model.addAttribute("applicationList", applicationService.findApplicationsByCourse(course));
                 return "sites/application/review";
