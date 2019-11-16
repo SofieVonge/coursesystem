@@ -143,6 +143,7 @@ public class CourseController
         List<StudyProgram>studyPrograms = Arrays.asList(StudyProgram.values());
 
         model.addAttribute("courseDTO", new CourseDto(course, teachers,studyPrograms));
+        model.addAttribute("user", user);
 
         return "sites/course/create";
     }
@@ -157,6 +158,7 @@ public class CourseController
             return "redirect:/";
         }
 
+        // remove gaps in dto lists..
         // remove null objects
         courseDto.getTeachers().removeAll(Collections.singleton(null));
         courseDto.getStudyPrograms().removeAll(Collections.singleton(null));
@@ -169,6 +171,7 @@ public class CourseController
                 courseDto.getTeachers().remove(usera);
         }
 
+        // prep course for saving
         // get course from dto
         course = courseDto.getCourse();
         // add specified teachers to course
