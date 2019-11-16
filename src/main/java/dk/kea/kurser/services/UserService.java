@@ -1,10 +1,12 @@
 package dk.kea.kurser.services;
 
+import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service for the user part of the system
@@ -37,6 +39,10 @@ public class UserService {
 
         //returner user
         return userOptional.orElse(null);
+    }
+
+    public Set<User> listTeachers() {
+        return userRepository.findByRole(Role.TEACHER);
     }
 
     /*public Set<User> seeStudentsBasedOnApplicationForSpecificCourse(Course course)
