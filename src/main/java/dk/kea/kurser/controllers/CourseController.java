@@ -179,7 +179,10 @@ public class CourseController
             return "redirect:/";
         }
 
-        courseService.deleteCourse(id);
+        if(canChange(id, user)) {
+            courseService.deleteCourse(id);
+        }
+
         return "redirect:/";
     }
 
@@ -194,9 +197,36 @@ public class CourseController
             return "redirect:/";
         }
 
-        //tilføj course med id til viewmodel
-        model.addAttribute("course", courseService.findById(id));
+        if(canChange(id, user)) {
+            //tilføj course med id til viewmodel
+            model.addAttribute("course", courseService.findById(id));
 
-        return "sites/course/update";
+            return "sites/course/update";
+        }
+
+        return "redirect:/";
+
+    }
+
+    private boolean canChange(Long id, User user)
+    {
+        Course course = courseService.findCourseById(id);
+
+        // if the user and the createdBy are the same, the course can be changed
+        if(course.getCreatedBy().getId() == user.getId())
+        {
+            return true;
+        }
+
+        // if the user and one of the teacher teaching the course are the same, the course can be changed
+        for(User teacher : course.getTeachers())
+        {
+            if(teacher.getId() == user.getId())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
