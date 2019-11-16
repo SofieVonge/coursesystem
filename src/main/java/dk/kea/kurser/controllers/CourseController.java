@@ -8,6 +8,7 @@ import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.StudyProgram;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.services.CourseService;
+import dk.kea.kurser.services.UserService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -25,6 +28,7 @@ public class CourseController
 {
 
     private CourseService courseService;
+    private UserService userService;
 
 
     public CourseController(CourseService courseService) {
@@ -45,6 +49,13 @@ public class CourseController
         model.addAttribute("user", user);
         return "sites/course/search";
     }
+
+    /*
+
+    Daniel, hvis du retter i course controller,
+    vil du så ikke lige tilføje 'user' fra session som model attribute i post mapping på submitsearch? så kan den nemlig vise navbaren uden fejl 🙂
+
+     */
 
     @PostMapping("course/search")
     public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model, HttpSession session) {
@@ -89,6 +100,7 @@ public class CourseController
 
         // add courseSearch dto to view model
         model.addAttribute("courseSearch", courseSearch);
+        model.addAttribute(user);
 
         return "sites/course/search";
     }
@@ -126,15 +138,21 @@ public class CourseController
             return "redirect:/";
         }
 
-        model.addAttribute("teachers", new ArrayList<Teacher>());
-        model.addAttribute("studyPrograms", new ArrayList<StudyProgram>());
+        model.addAttribute("teachers", userService.listTeachers());
+        model.addAttribute("studyPrograms",
+                Arrays.asList(
+                    StudyProgram.COMPUTER_SCIENCE,
+                    StudyProgram.IT_SECURITY,
+                    StudyProgram.SOFTWARE_DEVELOPMENT,
+                    StudyProgram.WEB_DEVELOPMENT));
+        model.addAttribute("course", new Course());
 
         return "sites/course/create";
     }
 
     @PostMapping("/course/create")
-    public String createCourse(Model model, HttpSession session) {
-        Course course = null;
+    public String createCourse(@ModelAttribute("course") Course course, HttpSession session) {
+
         User user = (User) session.getAttribute("user");
 
         if (user == null ||
@@ -142,13 +160,12 @@ public class CourseController
             return "redirect:/";
         }
 
-        course = new Course();
-
-        course.setTitleEnglish((String)model.getAttribute("titleEnglish"));
-        course.setEcts((int)model.getAttribute("ects"));
+        course.setCreatedBy(user);
+        Iterator<User> teacherIterator = course.getTeachers().iterator();
 
 
         courseService.createCourse(course);
+
         //bed browser om at navigere til index-siden
         return "redirect:/";
     }
