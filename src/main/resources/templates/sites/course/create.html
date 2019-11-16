@@ -9,6 +9,7 @@
 
     <style>
         .selection-box {
+            display: table;
             margin: 8px 0px;
             font-size: 90%;
         }
@@ -19,6 +20,15 @@
         .selection-box-header-row > div {
             border-bottom: 1px solid #0c0c0c;
             padding: 3px 10px;
+        }
+
+        .selection-box-row {
+            display:table-row;
+        }
+
+        .selection-box-row > div {
+            display:table-cell;
+            width: 50%
         }
 
         .selection-box-row > div:first-child {
@@ -46,6 +56,18 @@
 </head>
 <body>
 
+<th:block th:if="${user.role.name()} == 'STUDENT'">
+    <div th:replace="fragments/student-navmenu :: student-navmenu"></div>
+</th:block>
+
+<th:block th:if="${user.role.name()} == 'TEACHER'">
+    <div th:replace="fragments/teacher-navmenu :: teacher-navmenu"></div>
+</th:block>
+
+<th:block th:if="${user.role.name()} == 'ADMINISTRATOR'">
+    <div th:replace="fragments/admin-navmenu :: admin-navmenu"></div>
+</th:block>
+
 <div class="container">
     <h1>Create course</h1>
 
@@ -53,31 +75,31 @@
     <form action="#" th:action="@{/course/create}" th:object="${courseDTO}" method="post">
 
         <!--selection-box for teachers -->
-        <div class="form-control selection-box" style="display:table;">
+        <div class="form-control selection-box">
             <!-- selection-box header -->
             <div class="selection-box-header">
                 <span>Teachers</span>
             </div>
 
             <!-- selection-box header row -->
-            <div class="selection-box-row selection-box-header-row" style="display:table-row;">
-                <div style="display:table-cell; min-width: 300px;">
+            <div class="selection-box-row selection-box-header-row">
+                <div>
                     Excluded
                 </div>
-                <div style="display:table-cell; min-width: 300px;">
+                <div>
                     Included
                 </div>
             </div>
 
             <!-- selection-box content row -->
-            <div class="selection-box-row selection-box-content-row" style="display:table-row;">
+            <div class="selection-box-row selection-box-content-row">
                 <!-- selection-box excluded elements -->
-                <div class="selection-box-excluded" style="display:table-cell; min-width: 300px;">
+                <div class="selection-box-excluded">
                     <th:block th:each="teacher, it : ${courseDTO.teachers}">
                         <div class="selection-box-element" th:data-sort="${it.index}">
-                            <label th:for="'teacher-' + ${it.index} + '-1'" th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></label>
+                            <label th:for="'teacher-' + ${it.index} + '-id'" th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></label>
                             <input type="hidden" step="1" min="1" class="form-control quantity"
-                                    th:id="'teacher-' + ${it.index} + '-1'"
+                                    th:id="'teacher-' + ${it.index} + '-id'"
 
                                     th:name="'teachers[' + ${it.index} + '].id'"
                                     th:value="${teacher.id}"
@@ -86,38 +108,38 @@
                     </th:block>
                 </div>
                 <!-- selection-box excluded elements -->
-                <div class="selection-box-included" style="display:table-cell; min-width: 300px;">
+                <div class="selection-box-included">
 
                 </div>
             </div>
         </div>
 
         <!--selection-box for study programs -->
-        <div class="form-control selection-box" style="display:table;">
+        <div class="form-control selection-box">
             <!-- selection-box header -->
             <div class="selection-box-header">
                 <span>Study programs</span>
             </div>
 
             <!-- selection-box header row -->
-            <div class="selection-box-row selection-box-header-row" style="display:table-row;">
-                <div style="display:table-cell; min-width: 300px;">
+            <div class="selection-box-row selection-box-header-row">
+                <div>
                     Excluded
                 </div>
-                <div style="display:table-cell; min-width: 300px;">
+                <div>
                     Included
                 </div>
             </div>
 
             <!-- selection-box content row -->
-            <div class="selection-box-row selection-box-content-row" style="display:table-row;">
+            <div class="selection-box-row selection-box-content-row">
                 <!-- selection-box excluded elements -->
-                <div class="selection-box-excluded" style="display:table-cell; min-width: 300px;">
+                <div class="selection-box-excluded">
                     <th:block th:each="studyProgram, it : ${courseDTO.studyPrograms}">
                         <div class="selection-box-element" th:data-sort="${it.index}">
-                            <label th:for="'studyProgram-' + ${it.index} + '-1'" th:text="${studyProgram.label}"></label>
+                            <label th:for="'studyProgram-' + ${it.index}" th:text="${studyProgram.label}"></label>
                             <input type="hidden" step="1" min="1" class="form-control quantity"
-                                    th:id="'studyProgram-' + ${it.index} + '-1'"
+                                    th:id="'studyProgram-' + ${it.index}"
 
                                     th:name="'studyPrograms[' + ${it.index} + ']'"
                                     th:value="${studyProgram}"
@@ -126,7 +148,7 @@
                     </th:block>
                 </div>
                 <!-- selection-box excluded elements -->
-                <div class="selection-box-included" style="display:table-cell; min-width: 300px;">
+                <div class="selection-box-included">
 
                 </div>
             </div>
