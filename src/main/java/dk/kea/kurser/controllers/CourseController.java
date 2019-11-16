@@ -9,6 +9,7 @@ import dk.kea.kurser.models.StudyProgram;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.services.CourseService;
 import dk.kea.kurser.services.UserService;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -131,23 +132,17 @@ public class CourseController
     @GetMapping("/course/create")
     public String create(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        Course course = null;
-        List<User> teachers;
-        List<StudyProgram> studyPrograms;
 
         if (user == null ||
                 !(user.getRole().equals(Role.TEACHER))) {
             return "redirect:/";
         }
 
-        course = new Course();
-        teachers = new ArrayList<User>(userService.listTeachers());
-        studyPrograms = Arrays.asList(StudyProgram.values());
+        Course course = new Course();
+        List<User> teachers = new ArrayList<User>(userService.listTeachers());
+        List<StudyProgram>studyPrograms = Arrays.asList(StudyProgram.values());
 
         model.addAttribute("courseDTO", new CourseDto(course, teachers,studyPrograms));
-
-        System.out.println("init teacher count: " + teachers.size());
-        System.out.println("init study program count: " + studyPrograms.size());
 
         return "sites/course/create";
     }
@@ -162,27 +157,29 @@ public class CourseController
             return "redirect:/";
         }
 
-        /*User createdBy = new User();
-        createdBy.setId(user.getId());*/
+        // remove null objects
+        courseDto.getTeachers().removeAll(Collections.singleton(null));
+        courseDto.getStudyPrograms().removeAll(Collections.singleton(null));
+        // remove objects with null ids
+        Iterator<User> userIterator = courseDto.getTeachers().iterator();
+        while (userIterator.hasNext())
+        {
+            User usera = userIterator.next();
+            if(usera.getId() == null)
+                courseDto.getTeachers().remove(usera);
+        }
 
         // get course from dto
         course = courseDto.getCourse();
         // add specified teachers to course
-        course.setTeachers(new HashSet<>(courseDto.getTeachers()));
+        course.setTeachers(new HashSet<User>(courseDto.getTeachers()));
         // add specified study programs to course
-        course.setStudyPrograms(new HashSet<>(courseDto.getStudyPrograms()));
+        course.setStudyPrograms(new HashSet<StudyProgram>(courseDto.getStudyPrograms()));
         // set course created by to current user
         course.setCreatedBy(user);
-        // add course to teacher
-        //user.getCreatedCourses().add(course);
 
-
-        System.out.println("save teacher count: " + course.getTeachers().size());
-        System.out.println("save study program count: " + course.getStudyPrograms().size());
-
-
+        // save course
         courseService.createCourse(course);
-
 
         //bed browser om at navigere til index-siden
         return "redirect:/";
