@@ -1,37 +1,27 @@
 package dk.kea.kurser.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "courses")
 public class Course extends BaseEntity
 {
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = {
-            CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
+    @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "course")
     private Set<Application> applications = new HashSet<>();
 
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "students__courses",
             joinColumns = { @JoinColumn(name = "course_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") } )
     private Set<User> students = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "teachers__courses",
             joinColumns = { @JoinColumn(name = "course_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") } )
@@ -83,7 +73,6 @@ public class Course extends BaseEntity
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-
     public Course() { }
 
     public Course(Set<Application> applications, Set<User> students, Set<User> teachers, Set<StudyProgram> studyPrograms, int semester, String classCode, boolean mandatory, int ects, String spokenLanguage, int studentsMin, int studentsMax, int studentsExpected, String prerequisites, String learningOutcome, String content, String learningActivities, String examForm, String titleEnglish, String titleDanish, User createdBy) {
@@ -108,6 +97,7 @@ public class Course extends BaseEntity
         this.titleDanish = titleDanish;
         this.createdBy = createdBy;
     }
+
 
     public Set<User> getStudents() {
         return students;
