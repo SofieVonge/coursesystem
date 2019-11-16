@@ -3,25 +3,21 @@ package dk.kea.kurser.controllers;
 import dk.kea.kurser.dto.CourseDto;
 import dk.kea.kurser.dto.CourseSearch;
 import dk.kea.kurser.helpers.CourseSpecifications;
-import dk.kea.kurser.models.Course;
-import dk.kea.kurser.models.Role;
-import dk.kea.kurser.models.StudyProgram;
-import dk.kea.kurser.models.User;
+import dk.kea.kurser.models.*;
 import dk.kea.kurser.services.CourseService;
 import dk.kea.kurser.services.UserService;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.*;
 
+@SessionAttributes({"email", "role"})
 @Controller
 public class CourseController
 {
@@ -35,18 +31,26 @@ public class CourseController
         this.userService = userService;
     }
 
-    @GetMapping("course/search")
-    public String displaySearch(Model model, HttpSession session) {
-        User user = (User)session.getAttribute("user");
+    @ModelAttribute("email")
+    public String email(Principal principal) {
+        return principal.getName();
+    }
 
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
+    @ModelAttribute("role")
+    public Role role(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal)authentication.getPrincipal();
+        return userPrincipal.getRole();
+    }
+
+    @GetMapping(value = { "", "/", "/index", "course/search"})
+    public String displaySearch(Model model) {
+
+        User user = userService.findUserByEmail((String)model.getAttribute("email"));
+        if (!(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
             return "redirect:/";
         }
 
         model.addAttribute("courseSearch", new CourseSearch());
-        //add user to view model to correctly display nav menu
-        model.addAttribute("user", user);
         return "sites/course/search";
     }
 
@@ -58,11 +62,10 @@ public class CourseController
      */
 
     @PostMapping("course/search")
-    public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model, HttpSession session) {
-        User user = (User)session.getAttribute("user");
+    public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model) {
 
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
+        User user = userService.findUserByEmail((String)model.getAttribute("email"));
+        if (user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT)) {
             return "redirect:/";
         }
 
@@ -100,7 +103,6 @@ public class CourseController
 
         // add courseSearch dto to view model
         model.addAttribute("courseSearch", courseSearch);
-        model.addAttribute(user);
 
         return "sites/course/search";
     }
@@ -112,12 +114,9 @@ public class CourseController
      * @return a string leading to the html site path
      */
     @GetMapping("/course/{id}/view")
-    public String getCourse(@PathVariable("id") long id, Model model, HttpSession session) {
+    public String getCourse(@PathVariable("id") long id, Model model) {
 
-        User user = (User)session.getAttribute("user");
-
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
+        if (!model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT)) {
             return "redirect:/";
         }
 
@@ -130,11 +129,9 @@ public class CourseController
     }
 
     @GetMapping("/course/create")
-    public String create(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public String create(Model model) {
 
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER))) {
+        if (!model.getAttribute("role").equals(Role.TEACHER)) {
             return "redirect:/";
         }
 
@@ -143,20 +140,22 @@ public class CourseController
         List<StudyProgram>studyPrograms = Arrays.asList(StudyProgram.values());
 
         model.addAttribute("courseDTO", new CourseDto(course, teachers,studyPrograms));
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findUserByEmail((String)model.getAttribute("email"))); //re-insert
 
         return "sites/course/create";
     }
 
     @PostMapping("/course/create")
-    public String createCourse(@ModelAttribute("courseDto") CourseDto courseDto, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public String createCourse(@ModelAttribute("courseDto") CourseDto courseDto, Model model) {
+
         Course course = null;
 
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER))) {
+        if (!model.getAttribute("role").equals(Role.TEACHER)) {
             return "redirect:/";
         }
+
+        //re-inserted user here
+        User user = userService.findUserByEmail((String)model.getAttribute("email"));
 
         // remove gaps in dto lists..
         // remove null objects
@@ -189,15 +188,13 @@ public class CourseController
     }
 
     @GetMapping("/course/{id}/delete")
-    public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public String delete(@PathVariable("id") Long id, Model model) {
 
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER))) {
+        if (!model.getAttribute("role").equals(Role.TEACHER)) {
             return "redirect:/";
         }
 
-        if(courseService.canChange(id, user.getId())) {
+        if(courseService.canChange(id, userService.findUserByEmail((String)model.getAttribute("email")).getId())) {
             courseService.deleteCourse(id);
         }
 
@@ -206,16 +203,13 @@ public class CourseController
 
     // få fat id fra stien vha. @PathVariable
     @GetMapping("/course/{id}/update")
-    public String update(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String update(@PathVariable("id") Long id, Model model) {
 
-        User user = (User) session.getAttribute("user");
-
-        if (user == null ||
-                !(user.getRole().equals(Role.TEACHER))) {
+        if (!model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT)) {
             return "redirect:/";
         }
 
-        if(courseService.canChange(id, user.getId())) {
+        if(courseService.canChange(id, userService.findUserByEmail((String)model.getAttribute("email")).getId())) {
             //tilføj course med id til viewmodel
             model.addAttribute("course", courseService.findById(id));
 

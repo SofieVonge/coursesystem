@@ -2,15 +2,15 @@ package dk.kea.kurser.controllers;
 
 import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.User;
+import dk.kea.kurser.models.UserPrincipal;
 import dk.kea.kurser.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 /**
  * Service that manages the user part of the system
@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
  * @since 13-09-2019
  * @version 1.0
  */
+@SessionAttributes({"email", "role"})
 @Controller
 public class UserController {
 
@@ -26,6 +27,17 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @ModelAttribute("email")
+    public String email(Principal principal) {
+        return principal.getName();
+    }
+
+    @ModelAttribute("role")
+    public Role role(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal)authentication.getPrincipal();
+        return userPrincipal.getRole();
     }
 
     @GetMapping("/user/{id}/update")
