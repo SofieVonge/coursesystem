@@ -16,15 +16,9 @@ import java.util.Set;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    /**
-     * Finds a user based off an email and secret combination, used for authentication purposes
-     * @param email the given email for the user
-     * @param secret the given password for the user
-     * @return the user associated with the email and secret combination.
-     */
-    public User findByEmailAndSecret(String email, String secret);
-
     public Set<User> findByEnrolledCourses(Course course);
 
     public Set<User> findByRole(Role role);
+
+    public User findByEmail(String email);
 }

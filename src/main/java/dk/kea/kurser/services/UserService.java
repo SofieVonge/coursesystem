@@ -41,6 +41,10 @@ public class UserService {
         return userOptional.orElse(null);
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public Set<User> listTeachers() {
         return userRepository.findByRole(Role.TEACHER);
     }
