@@ -1,8 +1,8 @@
 package dk.kea.kurser.controllers;
 
+import dk.kea.kurser.dto.CourseDto;
 import dk.kea.kurser.dto.CourseSearch;
 import dk.kea.kurser.helpers.CourseSpecifications;
-import dk.kea.kurser.legacy.models.Teacher;
 import dk.kea.kurser.models.Course;
 import dk.kea.kurser.models.Role;
 import dk.kea.kurser.models.StudyProgram;
@@ -11,6 +11,7 @@ import dk.kea.kurser.services.CourseService;
 import dk.kea.kurser.services.UserService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class CourseController
@@ -31,8 +29,9 @@ public class CourseController
     private UserService userService;
 
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, UserService userService) {
         this.courseService = courseService;
+        this.userService = userService;
     }
 
     @GetMapping("course/search")
@@ -132,39 +131,58 @@ public class CourseController
     @GetMapping("/course/create")
     public String create(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        Course course = null;
+        List<User> teachers;
+        List<StudyProgram> studyPrograms;
 
         if (user == null ||
                 !(user.getRole().equals(Role.TEACHER))) {
             return "redirect:/";
         }
 
-        model.addAttribute("teachers", userService.listTeachers());
-        model.addAttribute("studyPrograms",
-                Arrays.asList(
-                    StudyProgram.COMPUTER_SCIENCE,
-                    StudyProgram.IT_SECURITY,
-                    StudyProgram.SOFTWARE_DEVELOPMENT,
-                    StudyProgram.WEB_DEVELOPMENT));
-        model.addAttribute("course", new Course());
+        course = new Course();
+        teachers = new ArrayList<User>(userService.listTeachers());
+        studyPrograms = Arrays.asList(StudyProgram.values());
+
+        model.addAttribute("courseDTO", new CourseDto(course, teachers,studyPrograms));
+
+        System.out.println("init teacher count: " + teachers.size());
+        System.out.println("init study program count: " + studyPrograms.size());
 
         return "sites/course/create";
     }
 
     @PostMapping("/course/create")
-    public String createCourse(@ModelAttribute("course") Course course, HttpSession session) {
-
+    public String createCourse(@ModelAttribute("courseDto") CourseDto courseDto, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        Course course = null;
 
         if (user == null ||
                 !(user.getRole().equals(Role.TEACHER))) {
             return "redirect:/";
         }
 
+        /*User createdBy = new User();
+        createdBy.setId(user.getId());*/
+
+        // get course from dto
+        course = courseDto.getCourse();
+        // add specified teachers to course
+        course.setTeachers(new HashSet<>(courseDto.getTeachers()));
+        // add specified study programs to course
+        course.setStudyPrograms(new HashSet<>(courseDto.getStudyPrograms()));
+        // set course created by to current user
         course.setCreatedBy(user);
-        Iterator<User> teacherIterator = course.getTeachers().iterator();
+        // add course to teacher
+        //user.getCreatedCourses().add(course);
+
+
+        System.out.println("save teacher count: " + course.getTeachers().size());
+        System.out.println("save study program count: " + course.getStudyPrograms().size());
 
 
         courseService.createCourse(course);
+
 
         //bed browser om at navigere til index-siden
         return "redirect:/";
