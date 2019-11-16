@@ -179,7 +179,7 @@ public class CourseController
             return "redirect:/";
         }
 
-        if(canChange(id, user)) {
+        if(courseService.canChange(id, user.getId())) {
             courseService.deleteCourse(id);
         }
 
@@ -197,7 +197,7 @@ public class CourseController
             return "redirect:/";
         }
 
-        if(canChange(id, user)) {
+        if(courseService.canChange(id, user.getId())) {
             //tilføj course med id til viewmodel
             model.addAttribute("course", courseService.findById(id));
 
@@ -208,25 +208,4 @@ public class CourseController
 
     }
 
-    private boolean canChange(Long id, User user)
-    {
-        Course course = courseService.findCourseById(id);
-
-        // if the user and the createdBy are the same, the course can be changed
-        if(course.getCreatedBy().getId() == user.getId())
-        {
-            return true;
-        }
-
-        // if the user and one of the teacher teaching the course are the same, the course can be changed
-        for(User teacher : course.getTeachers())
-        {
-            if(teacher.getId() == user.getId())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

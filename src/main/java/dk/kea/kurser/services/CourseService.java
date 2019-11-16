@@ -1,7 +1,9 @@
 package dk.kea.kurser.services;
 
 import dk.kea.kurser.models.Course;
+import dk.kea.kurser.models.User;
 import dk.kea.kurser.repositories.CourseRepository;
+import dk.kea.kurser.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,9 +23,11 @@ import java.util.Optional;
 public class CourseService
 {
     private CourseRepository courseRepository;
+    private UserRepository userRepo;
 
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
+        this.userRepo = userRepository;
     }
 
     public Iterable<Course> findAll() {
@@ -68,5 +72,29 @@ public class CourseService
     public void deleteCourse(Long id){
 
         courseRepository.deleteById(id);
+    }
+
+    public boolean canChange(Long courseId, Long userId)
+    {
+        Course course = findCourseById(courseId);
+        Optional<User> optionalUser = userRepo.findById(userId);
+        User user = optionalUser.get();
+
+        // if the user and the createdBy are the same, the course can be changed
+        if(course.getCreatedBy().getId() == user.getId())
+        {
+            return true;
+        }
+
+        // if the user and one of the teacher teaching the course are the same, the course can be changed
+        for(User teacher : course.getTeachers())
+        {
+            if(teacher.getId() == user.getId())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
