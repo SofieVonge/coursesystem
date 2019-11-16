@@ -15,4 +15,8 @@ public enum StudyProgram
     StudyProgram(final String label) {
         this.label = label;
     }
+
+    public final String getLabel() {
+        return label;
+    }
 }
