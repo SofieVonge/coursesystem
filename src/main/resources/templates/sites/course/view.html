@@ -37,7 +37,7 @@
             <td>
                 <th:block th:each="studyProgram : ${#lists.sort(course.studyPrograms)}">
                     <div>
-                        <span th:text="${studyProgram}">{studyProgram}</span>
+                        <span th:text="${studyProgram.getLabel()}">{studyProgram}</span>
                     </div>
                 </th:block>
             </td>
