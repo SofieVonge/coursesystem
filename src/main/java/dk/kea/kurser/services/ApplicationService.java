@@ -102,6 +102,13 @@ public class ApplicationService {
      */
     public void signUpForCourse(User student, Course course) {
 
+        //if user has already signed up, return
+        for (Application application : student.getApplications()) {
+            if (application.getCourse() == course) {
+                return;
+            }
+        }
+
         //create new application and set values
         Application application = new Application();
         application.setApplicationStatus(ApplicationStatus.PENDING);
