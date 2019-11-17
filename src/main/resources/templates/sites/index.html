@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>KEA Courses</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/error-label/error-label.css}" />
 </head>
 <body>
 <div class="container">
     <h1>KEA courses</h1>
     <hr>
-    <span th:if="${session[SPRING_SECURITY_LAST_EXCEPTION] != null and session[SPRING_SECURITY_LAST_EXCEPTION].message != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION].message}"/>
+    <span class="error-label" th:if="${session[SPRING_SECURITY_LAST_EXCEPTION] != null and session[SPRING_SECURITY_LAST_EXCEPTION].message != null}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION].message}"></span>
     <form action="/login" method="post">
         <div class="form-group">
             <label for="email">E-mail</label>
