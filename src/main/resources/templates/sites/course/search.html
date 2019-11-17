@@ -43,32 +43,34 @@
         </div>
     </form>
     <hr>
-    <table class="table">
-    <th:block th:each="course : ${courseSearch.courses}">
+    <span th:unless="${courseSearch.courses.size() > 0}"><em>No search results to show.</em></span>
+    <table class="table" th:if="${courseSearch.courses.size() > 0}">
         <thead>
             <tr>
                 <th>Course</th>
                 <th>Elective</th>
                 <th>ECTS</th>
                 <th>View</th>
-                <th th:if="${role.name() == 'TEACHER'}">Update</th>
+                <th th:if="${role.name() != 'STUDENT'}">Action</th>
             </tr>
         </thead>
-        <tr>
-            <td>
-                <span th:text="${course.titleDanish}"></span>
-                <span>&nbsp;/&nbsp;</span>
-                <span th:text="${course.titleEnglish}"></span>
-            </td>
-            <td th:text="${course.mandatory} ? 'Mandatory' : 'Elective'"></td>
-            <td th:text="${course.ects}"></td>
-            <td><a href="#" th:href="@{'/course/' + ${course.id} + '/view'}" class="btn btn-secondary" role="button">View</a></td>
-            <td th:if="${role.name() == 'TEACHER'}"><a href="#" th:href="@{'/course/' + ${course.id} + '/update'}" class="btn btn-dark" role="button">Update</a></td>
-        </tr>
-    </th:block>
+        <tbody>
+        <th:block th:each="course : ${courseSearch.courses}">
+            <tr>
+                <td>
+                    <span th:text="${course.titleDanish}"></span>
+                    <span>&nbsp;/&nbsp;</span>
+                    <span th:text="${course.titleEnglish}"></span>
+                </td>
+                <td th:text="${course.mandatory} ? 'Mandatory' : 'Elective'"></td>
+                <td th:text="${course.ects}"></td>
+                <td><a href="#" th:href="@{'/course/' + ${course.id} + '/view'}" class="btn btn-secondary" role="button">View</a></td>
+                <td th:if="${role.name() == 'TEACHER'}"><a href="#" th:href="@{'/course/' + ${course.id} + '/update'}" class="btn btn-dark" role="button">Update</a></td>
+                <td th:if="${role.name() == 'ADMINISTRATOR'}"><a href="#" th:href="@{'/course/' + ${course.id} + '/applications'}" class="btn btn-dark" role="button">Review applications</a></td>
+            </tr>
+            </th:block>
+        </tbody>
     </table>
-
-    <!-- insert table of results (from jquery) -->
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
