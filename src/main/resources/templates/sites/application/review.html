@@ -20,10 +20,10 @@
         <tbody>
         <th:block th:each="user_application : ${applicationList}">
             <tr>
-                <td><span th:text="${user_application.user.firstName} + ' ' + ${user_application.user.lastName}"/></td>
+                <td><span th:text="${user_application.student.firstName} + ' ' + ${user_application.student.lastName}"/></td>
                 <td><span th:text="${user_application.submittedAt}"/></td>
-                <td><a href="#" th:href="@{'/application/' + @{user_application.id} + '/accept'" onclick="return confirm('Are you sure you want to accept?')" role="button" class="btn btn-success">Accept</a></td>
-                <td><a href="#" th:href="@{'/application/' + @{user_application.id} + '/deny'}" onclick="return confirm('Are you sure you want to deny?')" role="button" class="btn btn-danger">Deny</a></td>
+                <td><a href="#" th:href="@{'/application/' + ${user_application.id} + '/accept'}" onclick="return confirm('Are you sure you want to accept?')" role="button" class="btn btn-success">Accept</a></td>
+                <td><a href="#" th:href="@{'/application/' + ${user_application.id} + '/deny'}" onclick="return confirm('Are you sure you want to deny?')" role="button" class="btn btn-danger">Deny</a></td>
             </tr>
         </th:block>
         </tbody>
