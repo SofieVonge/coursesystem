@@ -46,23 +46,12 @@ public class CourseController
     @GetMapping(value = { "", "/", "/index", "course/search"})
     public String displaySearch(Model model) {
 
-        User user = userService.findUserByEmail((String)model.getAttribute("email"));
-        if (!(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
-            return "redirect:/";
-        }
-
         model.addAttribute("courseSearch", new CourseSearch());
         return "sites/course/search";
     }
 
     @PostMapping("course/search")
     public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model) {
-
-        User user = userService.findUserByEmail((String)model.getAttribute("email"));
-
-        if (!(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
-            return "redirect:/";
-        }
 
         // holds fetched courses
         List<Course> courses = new ArrayList<>();

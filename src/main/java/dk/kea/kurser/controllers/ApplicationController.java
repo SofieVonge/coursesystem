@@ -51,9 +51,8 @@ public class ApplicationController {
      */
     @GetMapping("/course/{id}/applications")
     public String showApplications(@PathVariable("id") Long id, Model model) {
-        User user = userService.findUserByEmail((String) model.getAttribute("email"));
         //checks if the user is allowed to see the page
-        if (user.getRole().equals(Role.ADMINISTRATOR)) {
+        if (model.getAttribute("role").equals(Role.ADMINISTRATOR)) {
             //first we find the course
             Course course = courseService.findById(id);
             //then we get the applications to that course
@@ -73,13 +72,12 @@ public class ApplicationController {
      */
     @GetMapping("/application/{id}/accept")
     public String acceptApplication(@PathVariable("id") Long id, Model model) {
-        User user = userService.findUserByEmail((String) model.getAttribute("email"));
-        if (user.getRole().equals(Role.ADMINISTRATOR)) {
+        if (model.getAttribute("role").equals(Role.ADMINISTRATOR)) {
             //first we find the specific application
             Application application = applicationService.findApplicationById(id);
             //then we approve it
             applicationService.approveApplication(application);
-            return "redirect:/review";
+            return "redirect:/";
         }
 
         return "redirect:/";
@@ -93,11 +91,10 @@ public class ApplicationController {
      */
     @GetMapping("/application/{id}/deny")
     public String denyApplication(@PathVariable("id") Long id, Model model) {
-        User user = userService.findUserByEmail((String) model.getAttribute("email"));
-        if (user.getRole().equals(Role.ADMINISTRATOR)) {
+        if (model.getAttribute("role").equals(Role.ADMINISTRATOR)) {
             Application application = applicationService.findApplicationById(id);
             applicationService.rejectApplication(application);
-            return "redirect:/review";
+            return "redirect:/";
         }
 
         return "redirect:/";
