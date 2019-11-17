@@ -3,6 +3,7 @@ package dk.kea.kurser.controllers;
 import dk.kea.kurser.dto.CourseDto;
 import dk.kea.kurser.dto.CourseSearch;
 import dk.kea.kurser.helpers.CourseSpecifications;
+import dk.kea.kurser.helpers.UserComparator;
 import dk.kea.kurser.models.*;
 import dk.kea.kurser.services.CourseService;
 import dk.kea.kurser.services.UserService;
@@ -108,7 +109,7 @@ public class CourseController
      * @return a string leading to the html site path
      */
     @GetMapping("/course/{id}/view")
-    public String getCourse(@PathVariable("id") long id, Model model) {
+    public String displayCourse(@PathVariable("id") long id, Model model) {
 
         if (!(model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT))) {
             return "redirect:/";
