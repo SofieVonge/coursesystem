@@ -54,13 +54,6 @@ public class CourseController
         return "sites/course/search";
     }
 
-    /*
-
-    Daniel, hvis du retter i course controller,
-    vil du så ikke lige tilføje 'user' fra session som model attribute i post mapping på submitsearch? så kan den nemlig vise navbaren uden fejl 🙂
-
-     */
-
     @PostMapping("course/search")
     public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model) {
 
@@ -130,7 +123,7 @@ public class CourseController
     }
 
     @GetMapping("/course/create")
-    public String create(Model model) {
+    public String displayCreateCourse(Model model) {
 
         if (!model.getAttribute("role").equals(Role.TEACHER)) {
             return "redirect:/";
@@ -147,7 +140,7 @@ public class CourseController
     }
 
     @PostMapping("/course/create")
-    public String createCourse(@ModelAttribute("courseDto") CourseDto courseDto, Model model) {
+    public String submitCreateCourse(@ModelAttribute("courseDto") CourseDto courseDto, Model model) {
 
         Course course = null;
 
@@ -189,7 +182,7 @@ public class CourseController
     }
 
     @GetMapping("/course/{id}/delete")
-    public String delete(@PathVariable("id") Long id, Model model) {
+    public String submitDeleteCourse(@PathVariable("id") Long id, Model model) {
 
         if (!model.getAttribute("role").equals(Role.TEACHER)) {
             return "redirect:/";
@@ -202,23 +195,75 @@ public class CourseController
         return "redirect:/";
     }
 
-    // få fat på id fra stien vha. @PathVariable
     @GetMapping("/course/{id}/update")
-    public String update(@PathVariable("id") Long id, Model model) {
+    public String displayUpdateCourse(@PathVariable("id") Long id, Model model) {
 
-        if (!(model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT))) {
+        // if user doesn't have role permission to be here
+        if (!(model.getAttribute("role").equals(Role.TEACHER))) {
             return "redirect:/";
         }
 
-        if(courseService.canChange(id, userService.findUserByEmail((String)model.getAttribute("email")).getId())) {
-            //tilføj course med id til viewmodel
-            model.addAttribute("course", courseService.findById(id));
-
-            return "sites/course/update";
+        // if user doesn't have permission to update course
+        if(!courseService.canChange(id, userService.findUserByEmail((String)model.getAttribute("email")).getId())) {
+            return "redirect:/";
         }
 
-        return "redirect:/";
+        Course course = courseService.findCourseById(id);
+        List<User> teachers = new ArrayList<User>(userService.listTeachers());
+        List<StudyProgram>studyPrograms = Arrays.asList(StudyProgram.values());
 
+        model.addAttribute("courseDTO", new CourseDto(course, teachers,studyPrograms));
+        model.addAttribute("user", userService.findUserByEmail((String)model.getAttribute("email"))); //re-insert
+
+        return "sites/course/update";
     }
 
+    @PostMapping("/course/update")
+    public String submitUpdateCourse(@ModelAttribute("courseDto") CourseDto courseDto, Model model) {
+        User user = null;
+        Course course = null;
+
+        // if user doesn't have role permission to be here
+        if (!(model.getAttribute("role").equals(Role.TEACHER))) {
+            return "redirect:/";
+        }
+
+        //re-inserted user here
+        user = userService.findUserByEmail((String)model.getAttribute("email"));
+
+        // if user doesn't have permission to update course
+        if(!courseService.canChange(courseDto.getCourse().getId(), user.getId())) {
+            return "redirect:/";
+        }
+
+        // remove gaps in dto lists..
+        // remove null objects
+        courseDto.getTeachers().removeAll(Collections.singleton(null));
+        courseDto.getStudyPrograms().removeAll(Collections.singleton(null));
+        // remove objects with null ids
+        Iterator<User> userIterator = courseDto.getTeachers().iterator();
+        while (userIterator.hasNext())
+        {
+            User usera = userIterator.next();
+            if(usera.getId() == null)
+                courseDto.getTeachers().remove(usera);
+        }
+
+        // prep course for saving
+        // get course from dto
+        course = courseDto.getCourse();
+        // add specified teachers to course
+        course.setTeachers(new HashSet<User>(courseDto.getTeachers()));
+        // add specified study programs to course
+        course.setStudyPrograms(new HashSet<StudyProgram>(courseDto.getStudyPrograms()));
+
+        course.setApplications(null);
+        course.setStudents(null);
+
+        // save course
+        courseService.updateCourse(course);
+
+        //bed browser om at navigere til index-siden
+        return "redirect:/";
+    }
 }
