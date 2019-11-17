@@ -43,13 +43,15 @@
         </div>
     </form>
     <hr>
-    <table>
+    <table class="table">
     <th:block th:each="course : ${courseSearch.courses}">
         <thead>
             <tr>
                 <th>Course</th>
                 <th>Elective</th>
-                <th>ects</th>
+                <th>ECTS</th>
+                <th>View</th>
+                <th th:if="${role.name() == 'TEACHER'}">Update</th>
             </tr>
         </thead>
         <tr>
@@ -60,6 +62,8 @@
             </td>
             <td th:text="${course.mandatory} ? 'Mandatory' : 'Elective'"></td>
             <td th:text="${course.ects}"></td>
+            <td><a href="#" th:href="@{'/course/' + ${course.id} + '/view'}" class="btn btn-secondary" role="button">View</a></td>
+            <td th:if="${role.name() == 'TEACHER'}"><a href="#" th:href="@{'/course/' + ${course.id} + '/update'}" class="btn btn-dark" role="button">Update</a></td>
         </tr>
     </th:block>
     </table>
