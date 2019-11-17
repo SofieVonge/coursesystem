@@ -3,105 +3,210 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create Course</title>
+    <title>Update Course</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <link rel="stylesheet" th:href="@{/css/selectionbox/selectionbox.css}" />
 </head>
 <body>
+
+<th:block th:if="${role.name()} == 'STUDENT'">
+    <div th:replace="fragments/student-navmenu :: student-navmenu"></div>
+</th:block>
+
+<th:block th:if="${role.name()} == 'TEACHER'">
+    <div th:replace="fragments/teacher-navmenu :: teacher-navmenu"></div>
+</th:block>
+
+<th:block th:if="${role.name()} == 'ADMINISTRATOR'">
+    <div th:replace="fragments/admin-navmenu :: admin-navmenu"></div>
+</th:block>
 
 <div class="container">
     <h1>Update course</h1>
 
-    <th:block th:if="${course != null}">
-    <form action="#" th:action="@{/course/${course.id}/update}" method="post">
-        <input type="hidden" name= "id" th:value="${course.id}" />
-        <!-- <input type="text" name= "teacher" placeholder= "Teacher" />-->
-        <div>
-            <!-- model should provide a list teachers (mb from legacy system??) -->
-            add / remove teachers
-        </div>
-        <div>
-            <!-- model should provide study programs -->
-            add / remove study programs
-        </div>
-        <div class="form-group">
-            <label for="semester">Semester:</label>
-            <input type="number" id="semester" name= "semester" placeholder= "0" min="0" step="1" class="form-control" th:value="${course.semester}" />
-        </div>
-        <div class="form-group">
-            <label for="classCode">Class code:</label>
-            <input type="text" id="classCode" name= "classCode" placeholder= "Class code" class="form-control" th:value="${course.classCode}" />
-        </div>
+    <div>
+        <form action="#" th:action="@{/course/update}" th:object="${courseDTO}" method="post">
+            <input type="hidden" th:field="*{course.id}">
+            <input type="hidden" th:field="*{course.createdBy}">
+            <!--selection-box for teachers -->
+            <div class="form-control selection-box">
+                <!-- selection-box header -->
+                <div class="selection-box-header">
+                    <span>Teachers</span>
+                </div>
 
-        <div class="form-group">
-            <input type="checkbox" id="mandatory" name="mandatory" th:checked="${course.mandatory}" />
-            <label for="mandatory">Mandatory</label>
-        </div>
-        <div class="form-group">
-            <label for="ects">Ects:</label>
-            <input type="number" id="ects" name= "ects" step="5" placeholder="0" class="form-control" th:value="${course.ects}" />
-        </div>
-        <div class="form-group">
-            <label for="spokenLanguage">Spoken language:</label>
-            <input type="text" id="spokenLanguage" name= "spokenLanguage" placeholder= "Spoken language" class="form-control" th:value="${course.spokenLanguage}" />
-        </div>
-        <div class="form-group">
-            <label for="studentsMin">Students min:</label>
-            <input type="number" id="studentsMin" name= "studentsMin" placeholder= "0" min="0" step="1" class="form-control" th:value="${course.studentsMin}" />
-        </div>
-        <div class="form-group">
-            <label for="studentsMax">Students max:</label>
-            <input type="number" id="studentsMax" name= "studentsMax" placeholder= "0" min="0" step="1" class="form-control" th:value="${course.studentsMax}" />
-        </div>
-        <div class="form-group">
-            <label for="studentsExpected">Students expected:</label>
-            <input type="number" id="studentsExpected" name= "studentsExpected" placeholder= "0" min="0" step="1" class="form-control" th:value="${course.studentsExpected}" />
-        </div>
-        <div class="form-group">
-            <label for="prerequisites">Prerequisites:</label>
-            <input type="text" id="prerequisites" name= "prerequisites" placeholder= "Prerequisites" class="form-control" th:value="${course.prerequisites}" />
-        </div>
-        <div class="form-group">
-            <label for="learningOutcome">Learning outcome:</label>
-            <textarea type="text" id="learningOutcome" name= "learningOutcome" placeholder= "Learning outcome" class="form-control" th:text="${course.learningOutcome}" >
+                <!-- selection-box header row -->
+                <div class="selection-box-row selection-box-header-row">
+                    <div>
+                        Excluded
+                    </div>
+                    <div>
+                        Included
+                    </div>
+                </div>
+
+                <!-- selection-box content row -->
+                <div class="selection-box-row selection-box-content-row">
+                    <!-- selection-box excluded elements -->
+                    <div class="selection-box-excluded">
+                        <th:block th:each="teacher, it : ${courseDTO.teachers}">
+                            <div class="selection-box-element" th:data-sort="${it.index}">
+                                <label th:for="'teacher-' + ${it.index} + '-id'" th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></label>
+                                <input type="hidden" step="1" min="1" class="form-control quantity"
+                                       th:id="'teacher-' + ${it.index} + '-id'"
+                                       th:name="'teachers[' + ${it.index} + '].id'"
+                                       th:value="${teacher.id}"
+                                       disabled />
+                            </div>
+                        </th:block>
+                    </div>
+                    <!-- selection-box included elements -->
+                    <div class="selection-box-included">
+                        <th:block th:each="teacher, it : ${courseDTO.course.teachers}">
+                            <div class="selection-box-element" th:data-sort="${it.index}">
+                                <label th:for="'teacher-' + ${it.index} + '-id'" th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></label>
+                                <input type="hidden" step="1" min="1" class="form-control quantity"
+                                       th:id="'teacher-' + ${it.index} + '-id'"
+                                       th:name="'teachers[' + ${it.index} + '].id'"
+                                       th:value="${teacher.id}" />
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+
+            <!--selection-box for study programs -->
+            <div class="form-control selection-box">
+                <!-- selection-box header -->
+                <div class="selection-box-header">
+                    <span>Study programs</span>
+                </div>
+
+                <!-- selection-box header row -->
+                <div class="selection-box-row selection-box-header-row">
+                    <div>
+                        Excluded
+                    </div>
+                    <div>
+                        Included
+                    </div>
+                </div>
+
+                <!-- selection-box content row -->
+                <div class="selection-box-row selection-box-content-row">
+                    <!-- selection-box excluded elements -->
+                    <div class="selection-box-excluded">
+                        <th:block th:each="studyProgram, it : ${courseDTO.studyPrograms}">
+                            <div class="selection-box-element" th:data-sort="${it.index}">
+                                <label th:for="'studyProgram-' + ${it.index}" th:text="${studyProgram.label}"></label>
+                                <input type="hidden" step="1" min="1" class="form-control quantity"
+                                       th:id="'studyProgram-' + ${it.index}"
+                                       th:name="'studyPrograms[' + ${it.index} + ']'"
+                                       th:value="${studyProgram}"
+                                       disabled />
+                            </div>
+                        </th:block>
+                    </div>
+                    <!-- selection-box included elements -->
+                    <div class="selection-box-included">
+                        <th:block th:each="studyProgram, it : ${courseDTO.course.studyPrograms}">
+                            <div class="selection-box-element" th:data-sort="${it.index}">
+                                <label th:for="'studyProgram-' + ${it.index}" th:text="${studyProgram.label}"></label>
+                                <input type="hidden" step="1" min="1" class="form-control quantity"
+                                       th:id="'studyProgram-' + ${it.index}"
+                                       th:name="'studyPrograms[' + ${it.index} + ']'"
+                                       th:value="${studyProgram}" />
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <input type="number" id="semester" name= "semester" placeholder= "0" min="0" step="1" class="form-control" th:field="*{course.semester}" />
+            </div>
+            <div class="form-group">
+                <label for="classCode">Class code:</label>
+                <input type="text" id="classCode" name= "classCode" placeholder= "Class code" class="form-control" th:field="*{course.classCode}" />
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="mandatory" name="mandatory" th:field="*{course.mandatory}" />
+                <label for="mandatory">Mandatory</label>
+            </div>
+            <div class="form-group">
+                <label for="ects">Ects:</label>
+                <input type="number" id="ects" name= "ects" step="5" placeholder="0" class="form-control" th:field="*{course.ects}" />
+            </div>
+            <div class="form-group">
+                <label for="spokenLanguage">Spoken language:</label>
+                <input type="text" id="spokenLanguage" name= "spokenLanguage" placeholder= "Spoken language" class="form-control" th:field="*{course.spokenLanguage}" />
+            </div>
+            <div class="form-group">
+                <label for="studentsMin">Students min:</label>
+                <input type="number" id="studentsMin" name= "studentsMin" placeholder= "0" min="0" step="1" class="form-control" th:field="*{course.studentsMin}" />
+            </div>
+            <div class="form-group">
+                <label for="studentsMax">Students max:</label>
+                <input type="number" id="studentsMax" name= "studentsMax" placeholder= "0" min="0" step="1" class="form-control" th:field="*{course.studentsMax}" />
+            </div>
+            <div class="form-group">
+                <label for="studentsExpected">Students expected:</label>
+                <input type="number" id="studentsExpected" name= "studentsExpected" placeholder= "0" min="0" step="1" class="form-control" th:field="*{course.studentsExpected}" />
+            </div>
+            <div class="form-group">
+                <label for="prerequisites">Prerequisites:</label>
+                <input type="text" id="prerequisites" name= "prerequisites" placeholder= "Prerequisites" class="form-control" th:field="*{course.prerequisites}" />
+            </div>
+            <div class="form-group">
+                <label for="learningOutcome">Learning outcome:</label>
+                <textarea type="text" id="learningOutcome" name= "learningOutcome" placeholder= "Learning outcome" class="form-control" th:field="*{course.learningOutcome}" >
             </textarea>
-        </div>
-        <div class="form-group">
-            <label for="content">Content:</label>
-            <textarea type="text" id="Content" name= "content" placeholder= "Content" class="form-control" th:text="${course.content}" >
+            </div>
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea type="text" id="content" name= "content" placeholder= "Content" class="form-control" th:field="*{course.content}" >
             </textarea>
-        </div>
-        <div class="form-group">
-            <label for="learningActivities">Content:</label>
-            <textarea type="text" id="learningActivities" name= "learningActivities" placeholder= "Learning activities" class="form-control" th:text="${course.learningActivities}" >
+            </div>
+            <div class="form-group">
+                <label for="learningActivities">Learning activities:</label>
+                <textarea type="text" id="learningActivities" name= "learningActivities" placeholder= "Learning activities" class="form-control" th:field="*{course.learningActivities}" >
             </textarea>
-        </div>
-        <div class="form-group">
-            <label for="examForm">Exam form:</label>
-            <input type="text" id="examForm" name= "examForm" placeholder= "Exam Form" class="form-control" th:value="${course.examForm}" />
-        </div>
-        <div class="form-group">
-            <label for="titleEnglish">Title <sub>(english)</sub></label>
-            <input type="text" id="titleEnglish" name= "titleEnglish" placeholder= "Title English" class="form-control" th:value="${course.titleEnglish}" />
-        </div>
-        <div class="form-group">
-            <label for="titleDanish">Title <sub>(danish)</sub></label>
-            <input type="text" id="titleDanish" name= "titleDanish" placeholder= "Title Danish" class="form-control" th:value="${course.titleDanish}" />
-        </div>
+            </div>
+            <div class="form-group">
+                <label for="examForm">Exam form:</label>
+                <input type="text" id="examForm" name= "examForm" placeholder= "Exam Form" class="form-control" th:field="*{course.examForm}" />
+            </div>
+            <div class="form-group">
+                <label for="titleEnglish">Title <sub>(english)</sub></label>
+                <input type="text" id="titleEnglish" name= "titleEnglish" placeholder= "Title English" class="form-control" th:field="*{course.titleEnglish}" />
+            </div>
+            <div class="form-group">
+                <label for="titleDanish">Title <sub>(danish)</sub></label>
+                <input type="text" id="titleDanish" name= "titleDanish" placeholder= "Title Danish" class="form-control" th:field="*{course.titleDanish}" />
+            </div>
 
-        <div class="form-group">
-            <button class="btn btn-dark" type="submit">Update Course</button>
-        </div>
+            <div class="form-group">
+                <button class="btn btn-dark" type="submit">Update Course</button>
+            </div>
 
-    </form>
-    </th:block>
 
-    <th:block th:if="${course == null}">
-        The course you want you update was not found.
-    </th:block>
+        </form>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script th:src="@{/js/selectionbox/selectionbox.js}" type="text/javascript"></script>
+
+<!-- selection-box script -->
+<script type="text/javascript">
+    $(function() {
+        new SelectionBox().init();
+    });
+</script>
+
 </body>
 </html>
