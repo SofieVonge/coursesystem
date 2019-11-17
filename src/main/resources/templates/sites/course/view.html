@@ -90,7 +90,7 @@
             <!-- also needs to support multiple options -->
             <td><span>Teachers</span></td>
             <td>
-                <th:block th:each="teacher : *{#lists.sort(course.teachers, #helpers.UserComparator.nameComparator)}">
+                <th:block th:each="teacher : *{#lists.sort(course.teachers, T(dk.kea.kurser.helpers.UserComparator).nameComparator)}">
                     <div>
                         <span style="padding-right: 3px; " th:text="${teacher.firstName}">{teacher.firstName}</span>
                         <span th:text="${teacher.lastName}">{teacher.lastName}</span>
