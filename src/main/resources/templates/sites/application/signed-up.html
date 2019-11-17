@@ -24,9 +24,9 @@
         <tbody>
         <th:block th:each="user_application : ${applicationList}">
             <tr>
-                <td><span th:text="${user_application.course}"/>Example title</td>
-                <td><span th:text="${user_application.submittedAt}"/>01-01-2000 00:00:00</td>
-                <td><span th:text="${user_applicaiton.applicationStatus}"/>Pending</td>
+                <td><span th:text="${user_application.course.titleDanish} + ' / ' + ${user_application.course.titleEnglish}"/></td>
+                <td><span th:text="${user_application.submittedAt}"/></td>
+                <td><span th:text="${user_application.applicationStatus}"/></td>
             </tr>
         </th:block>
         </tbody>
