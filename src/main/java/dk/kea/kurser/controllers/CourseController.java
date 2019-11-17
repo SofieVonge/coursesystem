@@ -65,7 +65,8 @@ public class CourseController
     public String submitSearch(@ModelAttribute("courseSearch") CourseSearch courseSearch, Model model) {
 
         User user = userService.findUserByEmail((String)model.getAttribute("email"));
-        if (user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT)) {
+
+        if (!(user.getRole().equals(Role.TEACHER) || user.getRole().equals(Role.STUDENT))) {
             return "redirect:/";
         }
 
@@ -116,7 +117,7 @@ public class CourseController
     @GetMapping("/course/{id}/view")
     public String getCourse(@PathVariable("id") long id, Model model) {
 
-        if (!model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT)) {
+        if (!(model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT))) {
             return "redirect:/";
         }
 
@@ -201,11 +202,11 @@ public class CourseController
         return "redirect:/";
     }
 
-    // få fat id fra stien vha. @PathVariable
+    // få fat på id fra stien vha. @PathVariable
     @GetMapping("/course/{id}/update")
     public String update(@PathVariable("id") Long id, Model model) {
 
-        if (!model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT)) {
+        if (!(model.getAttribute("role").equals(Role.TEACHER) || model.getAttribute("role").equals(Role.STUDENT))) {
             return "redirect:/";
         }
 
