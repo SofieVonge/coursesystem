@@ -110,10 +110,10 @@ public class ApplicationController {
     public String submitSignUp(@PathVariable("id") long id, Model model) {
 
         //user must be authenticated as a student
-        User user = userService.findUserByEmail((String) model.getAttribute("email"));
-        if (user.getRole().equals(Role.STUDENT)) {
+        if (model.getAttribute("role").equals(Role.STUDENT)) {
             Course course = courseService.findCourseById(id);
             if (course != null) {
+                User user = userService.findUserByEmail((String) model.getAttribute("email"));
                 applicationService.signUpForCourse(user, course);
             }
 
