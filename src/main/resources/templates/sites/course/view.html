@@ -15,20 +15,20 @@
     <table class="table table-bordered">
         <tr>
             <th>Name of the course in Danish</th>
-            <td><span th:text="${course.danishName}"/></td>
+            <td><span th:text="${course.titleDanish}"/></td>
         </tr>
         <tr>
             <th>Name of the course in English</th>
-            <td><span th:text="${course.englishName}"/></td>
+            <td><span th:text="${course.titleEnglish}"/></td>
         </tr>
         <tr>
             <!-- needs to support multiple options with for loop-->
             <th>Study Program. One or more of the following options:</th>
-            <td><span th:text="${course.studyProgram}"/></td>
+            <td><span th:text="${course.studyPrograms}"/></td>
         </tr>
         <tr>
-            <th>Mandatory or Elective</th>
-            <td><span th:text="${course.type}"/></td>
+            <th>Is mandatory</th>
+            <td><span th:text="${course.mandatory}"/></td>
         </tr>
         <tr>
             <th>ECTS</th>
@@ -36,19 +36,19 @@
         </tr>
         <tr>
             <th>Course language</th>
-            <td><span th:text="${course.language}"/></td>
+            <td><span th:text="${course.spokenLanguage}"/></td>
         </tr>
         <tr>
             <th>Minimum number of students</th>
-            <td><span th:text="${course.minStudents}"/></td>
+            <td><span th:text="${course.studentsMin}"/></td>
         </tr>
         <tr>
             <th>Expected number of students</th>
-            <td><span th:text="${course.expStudents}"/></td>
+            <td><span th:text="${course.studentsExpected}"/></td>
         </tr>
         <tr>
             <th>Maximum number of students</th>
-            <td><span th:text="${course.maxStudents}"/></td>
+            <td><span th:text="${course.studentsMax}"/></td>
         </tr>
         <tr>
             <th>Prerequisites</th>
@@ -77,7 +77,14 @@
         </tr>
     </table>
     <hr>
-    <a class="btn btn-dark" type="button" href="@{course/' + ${course.id} + '/signup}">Sign up</a>
+
+    <th:block th:if="${role.name()} == 'STUDENT'">
+        <a href="#" class="btn btn-dark" type="button" th:href="@{'/course/' + ${course.id} + '/signup'}">Sign up</a>
+    </th:block>
+
+    <th:block th:if="${role.name()} == 'TEACHER'">
+        <a href="#" class="btn btn-dark" type="button" th:href="@{'/course/' + ${course.id} + '/update'}">Update course</a>
+    </th:block>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
