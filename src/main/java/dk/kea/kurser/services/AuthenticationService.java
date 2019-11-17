@@ -1,6 +1,6 @@
 package dk.kea.kurser.services;
 
-import dk.kea.kurser.dto.Credentials;
+//import dk.kea.kurser.dto.Credentials;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class AuthenticationService {
      * @param credentials the credentials of the user authenticating
      * @return the user that was authenticated
      */
-    public User authenticatedAs(Credentials credentials) {
+    /*public User authenticatedAs(Credentials credentials) {
         return userRepository.findByEmailAndSecret(credentials.getEmail(), credentials.getSecret());
-    }
+    }*/
 }
