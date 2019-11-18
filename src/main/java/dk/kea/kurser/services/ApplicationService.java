@@ -5,6 +5,8 @@ import dk.kea.kurser.models.ApplicationStatus;
 import dk.kea.kurser.models.Course;
 import dk.kea.kurser.models.User;
 import dk.kea.kurser.repositories.ApplicationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -118,5 +120,13 @@ public class ApplicationService {
 
         //save application
         applicationRepository.save(application);
+    }
+
+    public Iterable<Application> list() {
+        return applicationRepository.findAll();
+    }
+
+    public Page<Application> listPage(Pageable pageable) {
+        return applicationRepository.findAll(pageable);
     }
 }
