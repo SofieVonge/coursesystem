@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>KEA Courses</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<div th:replace="fragments/admin-navmenu :: admin-navmenu"></div>
+
+<div class="container">
+    <h1>Applications</h1>
+    <hr>
+    <table>
+        <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Submitted</th>
+            <th>Action</th>
+        </tr>
+        <th:block th:each="app : ${applicationSearchDto.applications.content}">
+            <tr>
+                <td>
+                    <span th:text="${app.course.titleEnglish}"></span><br />
+                    <span th:text="${app.course.titleDanish}"></span>
+                </td>
+                <td>
+                    <span th:text="${app.student.firstName}"></span> <span th:text="${app.student.lastName}"></span>
+                </td>
+                <td>
+                    <span th:text="${app.submittedAt}"></span>
+                </td>
+                <td>Accept / Reject</td>
+            </tr>
+        </th:block>
+    </table>
+    <hr>
+
+
+
+    <th:block th:if="${applicationSearchDto.applications.totalElements > 0}">
+        <div>
+            <div th:if="${applicationSearchDto.applications.pageable.pageNumber > 0}">
+                <span><a th:href="@{/application/list(page=1)}">1</a></span>
+                <div th:if="${applicationSearchDto.applications.pageable.pageNumber > 1}">
+                    <span>...</span>
+                </div>
+                <div>
+                    <a th:href="@{/application/list(page=${applicationSearchDto.applications.pageable.pageNumber})}">[Previous page]</a>
+                </div>
+            </div>
+
+            <div>
+                <span th:text="${applicationSearchDto.applications.pageable.pageNumber} + 1"></span>
+            </div>
+
+            <div th:if="${applicationSearchDto.applications.pageable.pageNumber + 1 < applicationSearchDto.applications.totalPages}">
+                <div>
+                    <span>
+                        <a th:href="@{/application/list(page=${applicationSearchDto.applications.pageable.pageNumber} + 2)}">[Next page]</a>
+                    </span>
+                </div>
+                <div th:if="${applicationSearchDto.applications.totalPages > applicationSearchDto.applications.pageable.pageNumber + 2}">
+                    <span>...</span>
+                </div>
+                <div>
+                    <span>
+                        <a th:href="@{/application/list(page=${applicationSearchDto.applications.totalPages})}" th:text="${applicationSearchDto.applications.totalPages}"></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
