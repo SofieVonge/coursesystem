@@ -30,14 +30,14 @@ class TeacherApiServiceTest {
         teacher.setEmail("tim@kea.dk");
         teacher.setName("Tim");
 
-        teacherApiService.addTeacher(teacher);
-        assertTrue(teacherApiService.teacherExists(newId));
+        teacherApiService.add(teacher);
+        assertTrue(teacherApiService.exists(newId));
     }
 
     @Test
     void findTeacherById() {
         Teacher teacher = null;
-        teacher = teacherApiService.findTeacherById(1);
+        teacher = teacherApiService.findById(1);
         assertEquals(1, teacher.getId());
     }
 
@@ -56,19 +56,19 @@ class TeacherApiServiceTest {
         //wrapped in if statement to ignore (ignore tag didnt work)
         if (false) {
             //fetch teacher
-            Teacher teacher = teacherApiService.findTeacherById(46);
+            Teacher teacher = teacherApiService.findById(46);
             //delete it from rest service
-            teacherApiService.deleteTeacher(teacher);
+            teacherApiService.delete(teacher);
             //assert it no longer exists
-            assertFalse(teacherApiService.teacherExists(46));
+            assertFalse(teacherApiService.exists(46));
             //add teacher back
-            teacherApiService.addTeacher(teacher);
+            teacherApiService.add(teacher);
         }
     }
 
     @Test
     void teacherExists() {
-        Teacher teacher = teacherApiService.findTeacherById(1);
+        Teacher teacher = teacherApiService.findById(1);
         assertNotNull(teacher);
     }
 }
