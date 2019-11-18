@@ -4,6 +4,7 @@ import dk.kea.kurser.models.Application;
 import dk.kea.kurser.models.Course;
 import dk.kea.kurser.models.User;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 
 @Repository
-public interface ApplicationRepository extends CrudRepository<Application, Long> {
+public interface ApplicationRepository extends CrudRepository<Application, Long>, PagingAndSortingRepository<Application, Long> {
 
     public Set<Application> findByCourse(Course course);
 
