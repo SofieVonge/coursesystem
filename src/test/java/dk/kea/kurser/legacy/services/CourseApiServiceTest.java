@@ -32,8 +32,8 @@ class CourseApiServiceTest {
     void findCourseById() {
         for (int i = 0; i < 10; i++) {
             try {
-                if (courseApiService.courseExists(i)) {
-                    Course course = courseApiService.findCourseById(i);
+                if (courseApiService.exists(i)) {
+                    Course course = courseApiService.findById(i);
                     System.out.println(course);
                     assertNotNull(course);
                 }

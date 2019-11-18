@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 @Service
-public class CourseApiService {
+public class CourseApiService implements IApiService<Course> {
 
     private RestTemplate restTemplate;
     private String restUrl;
@@ -32,6 +32,7 @@ public class CourseApiService {
      * Fetches a list of all courses from the REST api service
      * @return a list of all courses, an empty list is returned if none were fetched
      */
+    @Override
     public List<Course> listAll() {
         Course[] courses = restTemplate.getForObject(restUrl + "/course", Course[].class);
 
@@ -46,7 +47,8 @@ public class CourseApiService {
      * Adds a course to the REST api service
      * @param course the course to add
      */
-    public void addCourse(Course course) {
+    @Override
+    public void add(Course course) {
         restTemplate.postForObject(restUrl + "/course", course, Course.class);
     }
 
@@ -55,7 +57,8 @@ public class CourseApiService {
      * @param id the id of the course to fetch
      * @return the course fetched
      */
-    public Course findCourseById(int id) {
+    @Override
+    public Course findById(int id) {
         return restTemplate.getForObject(restUrl + "/course/" + id, Course.class);
     }
 
@@ -63,7 +66,8 @@ public class CourseApiService {
      * Updates a course in the REST api service
      * @param course the course to update
      */
-    public void updateCourse(Course course) {
+    @Override
+    public void update(Course course) {
         restTemplate.put(restUrl + "/course/" + course.getId(), course);
     }
 
@@ -71,7 +75,8 @@ public class CourseApiService {
      * Deletes a course from the REST api service
      * @param course the course to delete
      */
-    public void deleteCourse(Course course) {
+    @Override
+    public void delete(Course course) {
         restTemplate.delete(restUrl + "/course/" + course.getId(), course);
     }
 
@@ -80,7 +85,8 @@ public class CourseApiService {
      * @param id the id of the course to check
      * @return true if the course exists, false if not
      */
-    public boolean courseExists(int id) {
+    @Override
+    public boolean exists(int id) {
         //fetch resources as a simple string
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(restUrl + "/course/exist/" + id, String.class);
         //if status code is 204/no content, assume it exists

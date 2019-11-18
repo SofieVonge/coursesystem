@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0
  */
 @Service
-public class TeacherApiService {
+public class TeacherApiService implements IApiService<Teacher> {
 
     private RestTemplate restTemplate;
     private String restUrl;
@@ -32,6 +32,7 @@ public class TeacherApiService {
      * Fetches a list of all teachers from the REST api service
      * @return a list of all teachers, an empty list is returned if none were fetched
      */
+    @Override
     public List<Teacher> listAll() {
         Teacher[] teachers = restTemplate.getForObject(restUrl + "/teacher", Teacher[].class);
 
@@ -46,7 +47,8 @@ public class TeacherApiService {
      * Adds a teacher to the REST api service
      * @param teacher the teacher to add
      */
-    public void addTeacher(Teacher teacher) {
+    @Override
+    public void add(Teacher teacher) {
         restTemplate.postForObject(restUrl + "/teacher", teacher, Teacher.class);
     }
 
@@ -55,7 +57,8 @@ public class TeacherApiService {
      * @param id the id of the teacher to fetch
      * @return the teacher fetched
      */
-    public Teacher findTeacherById(int id) {
+    @Override
+    public Teacher findById(int id) {
         return restTemplate.getForObject(restUrl + "/teacher/" + id, Teacher.class);
     }
 
@@ -63,7 +66,8 @@ public class TeacherApiService {
      * Updates a teacher in the REST api service
      * @param teacher the teacher to update
      */
-    public void updateTeacher(Teacher teacher) {
+    @Override
+    public void update(Teacher teacher) {
         restTemplate.put(restUrl + "/teacher/" + teacher.getId(), teacher);
     }
 
@@ -71,7 +75,8 @@ public class TeacherApiService {
      * Deletes a teacher from the REST api service
      * @param teacher the teacher to delete
      */
-    public void deleteTeacher(Teacher teacher) {
+    @Override
+    public void delete(Teacher teacher) {
         restTemplate.delete(restUrl + "/teacher/" + teacher.getId(), teacher);
     }
 
@@ -80,7 +85,8 @@ public class TeacherApiService {
      * @param id the id of the teacher to check
      * @return true if the teacher exists, false if not
      */
-    public boolean teacherExists(int id) {
+    @Override
+    public boolean exists(int id) {
         //fetch resources as a simple string
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(restUrl + "/teacher/exist/" + id, String.class);
         //if status code is 204/no content, assume it exists
