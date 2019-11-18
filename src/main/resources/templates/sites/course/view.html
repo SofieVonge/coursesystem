@@ -102,11 +102,11 @@
     <hr>
 
     <th:block th:if="${role.name()} == 'STUDENT'">
-        <a href="#" class="btn btn-dark" type="button" th:href="@{'/course/' + ${course.id} + '/signup'}">Sign up</a>
+        <a href="#" class="btn btn-dark" role="button" th:href="@{'/course/' + ${course.id} + '/signup'}">Sign up</a>
     </th:block>
 
     <th:block th:if="${role.name()} == 'TEACHER'">
-        <a href="#" class="btn btn-dark" type="button" th:href="@{'/course/' + ${course.id} + '/update'}">Update course</a>
+        <a href="#" class="btn btn-dark" role="button" th:href="@{'/course/' + ${course.id} + '/update'}">Update course</a>
     </th:block>
 
 </div>
