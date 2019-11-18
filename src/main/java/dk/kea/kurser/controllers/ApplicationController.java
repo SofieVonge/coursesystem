@@ -1,18 +1,21 @@
 package dk.kea.kurser.controllers;
 
+import dk.kea.kurser.dto.ApplicationSearchDto;
 import dk.kea.kurser.models.*;
 import dk.kea.kurser.services.ApplicationService;
 import dk.kea.kurser.services.CourseService;
 import dk.kea.kurser.services.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.Set;
 
 @SessionAttributes({"email", "role"})
@@ -145,5 +148,51 @@ public class ApplicationController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/application/list")
+    public String displayList(@RequestParam Map<String,String> requestParams, Model model) {
+
+        int page = 0;
+        int elements = 10;
+        Sort sort = Sort.by("submittedAt").ascending();
+        Pageable pageable = null;
+
+        if(requestParams.containsKey("page")) {
+            try {
+                page = Integer.parseInt(requestParams.get("page")) - 1;
+                if(page < 0)
+                    page = 0;
+            } catch (NumberFormatException nfe) {
+                /* nothing to see here */
+            }
+        }
+
+        if(requestParams.containsKey("elements")) {
+            try {
+                elements = Integer.parseInt(requestParams.get("elements"));
+            } catch (NumberFormatException nfe) {
+                /* nothing to see here */
+            }
+        }
+
+        if(requestParams.containsKey("sortBy")) {
+            String sortByParam = requestParams.get("sortBy");
+
+            if(sortByParam.toLowerCase().equals(ApplicationSearchDto.SortMethod.COURSE.name().toLowerCase())) {
+                sort = Sort.by("course.id").and(Sort.by("submittedAt").ascending()).ascending();
+            }
+        }
+
+        pageable = PageRequest.of(page, elements, sort);
+
+        Page<Application> applicationPage = applicationService.listPage(pageable);
+
+        model.addAttribute("applicationSearchDto",
+                new ApplicationSearchDto(
+                        ApplicationSearchDto.SortMethod.SUBMIT_TIME,
+                        applicationPage));
+
+        return "sites/application/list";
     }
 }
