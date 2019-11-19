@@ -38,40 +38,98 @@
     <hr>
 
 
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            <!-- previous button -->
+            <li th:class="${applicationSearchDto.applications.number eq 0} ? 'disabled' : ''">
+                <a th:if="${not applicationSearchDto.applications.first}" th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.number-1},size=${applicationSearchDto.applications.size})}">Previous</a>
+                <a th:if="${applicationSearchDto.applications.first}" href="javascript:void(0);">Previous</a>
+            </li>
 
-    <th:block th:if="${applicationSearchDto.applications.totalElements > 0}">
-        <div>
-            <div th:if="${applicationSearchDto.applications.pageable.pageNumber > 0}">
-                <span><a th:href="@{/application/list(page=1)}">1</a></span>
-                <div th:if="${applicationSearchDto.applications.pageable.pageNumber > 1}">
+            <!-- display first page -->
+            <li th:if="${minPage > 1}">
+                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
+                    <span>1</span>
+                </a>
+            </li>
+
+            <li th:if="${minPage > 2}">
+                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
                     <span>...</span>
-                </div>
-                <div>
-                    <a th:href="@{/application/list(page=${applicationSearchDto.applications.pageable.pageNumber})}">[Previous page]</a>
-                </div>
-            </div>
+                </a>
+            </li>
 
-            <div>
-                <span th:text="${applicationSearchDto.applications.pageable.pageNumber} + 1"></span>
-            </div>
+            <!-- bc[d]ef -->
+            <li th:each="pageNo : ${#numbers.sequence(minPage, maxPage)}">
+                <a th:href="@{${'/application/list'}(page=${pageNo},size=${applicationSearchDto.applications.size})}">
+                    <span th:text="${pageNo}"></span>
+                </a>
+            </li>
 
-            <div th:if="${applicationSearchDto.applications.pageable.pageNumber + 1 < applicationSearchDto.applications.totalPages}">
-                <div>
-                    <span>
-                        <a th:href="@{/application/list(page=${applicationSearchDto.applications.pageable.pageNumber} + 2)}">[Next page]</a>
-                    </span>
-                </div>
-                <div th:if="${applicationSearchDto.applications.totalPages > applicationSearchDto.applications.pageable.pageNumber + 2}">
+            <li th:if="${maxPage + 1 < applicationSearchDto.applications.totalPages}">
+                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
                     <span>...</span>
-                </div>
-                <div>
-                    <span>
-                        <a th:href="@{/application/list(page=${applicationSearchDto.applications.totalPages})}" th:text="${applicationSearchDto.applications.totalPages}"></a>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </th:block>
+                </a>
+            </li>
+
+            <!-- display last page -->
+            <li th:if="${maxPage < applicationSearchDto.applications.totalPages}">
+                <a th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.totalPages},size=${applicationSearchDto.applications.size})}">
+                    <span th:text="${applicationSearchDto.applications.totalPages}"></span>
+                </a>
+            </li>
+
+            <li th:class="${applicationSearchDto.applications.number + 1 ge applicationSearchDto.applications.totalPages} ? 'disabled' : ''">
+                <a th:if="${not applicationSearchDto.applications.last}" th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.number+2},size=${applicationSearchDto.applications.size})}">Next</a>
+                <a th:if="${applicationSearchDto.applications.last}" href="javascript:void(0);">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+<!--
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            <li th:class="${applicationSearchDto.applications.number eq 0} ? 'disabled' : ''">
+                <a th:if="${not applicationSearchDto.applications.first}" th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.number-1},size=${applicationSearchDto.applications.size})}">Previous</a>
+                <a th:if="${applicationSearchDto.applications.first}" href="javascript:void(0);">Previous</a>
+            </li>
+
+            <li th:if="${applicationSearchDto.applications.number > 3}">
+                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
+                    <span>1</span>
+                </a>
+            </li>
+
+            <li th:if="${applicationSearchDto.applications.number > 4}">
+                <span>...</span>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(applicationSearchDto.applications.number - 3, applicationSearchDto.applications.number + 5)}">
+                <a th:if="${i >= 0 and i < applicationSearchDto.applications.totalPages and applicationSearchDto.applications.number  eq i}" href="javascript:void(0);">
+                    <span th:text="${i + 1}"></span>
+                </a>
+                <a th:if="${i >= 0 and i < applicationSearchDto.applications.totalPages and not (applicationSearchDto.applications.number  eq i)}" th:href="@{${'/application/list'}(page=${i+1},size=${applicationSearchDto.applications.size})}">
+                    <span th:text="${i + 1}"></span>
+                </a>
+
+            </li>
+            <li th:if="${applicationSearchDto.applications.number + 7 < applicationSearchDto.applications.totalPages}">
+                <span>...</span>
+            </li>
+            <li th:if="${applicationSearchDto.applications.number + 6 < applicationSearchDto.applications.totalPages}">
+                <a th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.totalPages},size=${applicationSearchDto.applications.size})}">
+                    <span th:text="${applicationSearchDto.applications.totalPages}"></span>
+                </a>
+            </li>
+
+
+            <li th:class="${applicationSearchDto.applications.number + 1 ge applicationSearchDto.applications.totalPages} ? 'disabled' : ''">
+                <a th:if="${not applicationSearchDto.applications.last}" th:href="@{${'/application/list'}(page=${applicationSearchDto.applications.number+2},size=${applicationSearchDto.applications.size})}">Next</a>
+                <a th:if="${applicationSearchDto.applications.last}" href="javascript:void(0);">Next</a>
+            </li>
+        </ul>
+    </nav>
+-->
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
