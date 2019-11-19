@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <title>KEA Courses</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .pagination li:last-child {
+            margin-left: 10px;
+        }
+        .pagination li:first-child {
+            margin-right: 10px;
+        }
+        .pagination li {
+            margin: 0px 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -54,27 +65,23 @@
             </li>
 
             <li th:if="${minPage > 2}">
-                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
-                    <span>...</span>
-                </a>
+                <span>...</span>
             </li>
 
             <!-- display current page with adjacent pages -->
             <th:block th:each="pageNo : ${#numbers.sequence(minPage, maxPage)}">
                 <li th:if="${pageNo le applicationSearchDto.applications.totalPages}">
-                    <a th:if="${not (pageNo eq applicationSearchDto.applications.number)}" th:href="@{${'/application/list'}(page=${pageNo},size=${applicationSearchDto.applications.size})}">
+                    <a th:if="${not (pageNo eq (applicationSearchDto.applications.number + 1))}" th:href="@{${'/application/list'}(page=${pageNo},size=${applicationSearchDto.applications.size})}">
                         <span th:text="${pageNo}"></span>
                     </a>
-                    <a th:if="${pageNo eq applicationSearchDto.applications.number}" href="javascript:void(0);">
-                        <span th:text="${pageNo}"></span>
+                    <a th:if="${pageNo eq (applicationSearchDto.applications.number + 1)}" href="javascript:void(0);">
+                        <span th:text="'[' + ${pageNo} + ']'"></span>
                     </a>
                 </li>
             </th:block>
 
             <li th:if="${maxPage + 1 < applicationSearchDto.applications.totalPages}">
-                <a th:href="@{${'/application/list'}(page=1,size=${applicationSearchDto.applications.size})}">
-                    <span>...</span>
-                </a>
+                <span>...</span>
             </li>
 
             <!-- display last page -->
