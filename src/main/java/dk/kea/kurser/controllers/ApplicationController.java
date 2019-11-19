@@ -14,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -154,7 +157,7 @@ public class ApplicationController {
     public String displayList(@RequestParam Map<String,String> requestParams, Model model) {
 
         int page = 0;
-        int elements = 10;
+        int size = 10;
         Sort sort = Sort.by("submittedAt").ascending();
         Pageable pageable = null;
 
@@ -168,25 +171,33 @@ public class ApplicationController {
             }
         }
 
-        if(requestParams.containsKey("elements")) {
+        if(requestParams.containsKey("size")) {
             try {
-                elements = Integer.parseInt(requestParams.get("elements"));
+                size = Integer.parseInt(requestParams.get("size"));
             } catch (NumberFormatException nfe) {
                 /* nothing to see here */
             }
         }
 
-        if(requestParams.containsKey("sortBy")) {
-            String sortByParam = requestParams.get("sortBy");
+        if(requestParams.containsKey("sort")) {
+            String sortByParam = requestParams.get("sort");
 
             if(sortByParam.toLowerCase().equals(ApplicationSearchDto.SortMethod.COURSE.name().toLowerCase())) {
                 sort = Sort.by("course.id").and(Sort.by("submittedAt").ascending()).ascending();
             }
         }
 
-        pageable = PageRequest.of(page, elements, sort);
+        pageable = PageRequest.of(page, size, sort);
 
         Page<Application> applicationPage = applicationService.listPage(pageable);
+
+        int adjacent = 4;
+        int minPage = Math.max(1, (int)Math.min(applicationPage.getTotalPages() - adjacent, (page + 1) - Math.ceil((double)(adjacent / 2))));
+        int maxPage = minPage + 4;
+
+
+        model.addAttribute("minPage", minPage);
+        model.addAttribute("maxPage", maxPage);
 
         model.addAttribute("applicationSearchDto",
                 new ApplicationSearchDto(
