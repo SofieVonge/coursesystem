@@ -23,12 +23,15 @@
 <div class="container">
     <h1>Applications</h1>
     <hr>
-    <table>
+    <span th:unless="${applicationSearchDto.applications.getSize() > 0}" th:text="No applications have been submitted for review."/>
+    <table th:if="${applicationSearchDto.applications.getSize() > 0}" class="table">
         <tr>
-            <th>Student</th>
             <th>Course</th>
+            <th>Student</th>
             <th>Submitted</th>
-            <th>Action</th>
+            <th>Status</th>
+            <th>Accept</th>
+            <th>Deny</th>
         </tr>
         <th:block th:each="app : ${applicationSearchDto.applications.content}">
             <tr>
@@ -42,7 +45,15 @@
                 <td>
                     <span th:text="${app.submittedAt}"></span>
                 </td>
-                <td>Accept / Reject</td>
+                <td>
+                    <span th:text="${app.applicationStatus}"></span>
+                </td>
+                <td>
+                    <a href="#" th:if="${app.applicationStatus.name() == 'PENDING'}" th:href="@{'/application/' + ${app.id} + '/accept'}" onclick="return confirm('Are you sure you want to accept?')" role="button" class="btn btn-success">Accept</a>
+                </td>
+                <td>
+                    <a href="#" th:if="${app.applicationStatus.name() == 'PENDING'}" th:href="@{'/application/' + ${app.id} + '/deny'}" onclick="return confirm('Are you sure you want to deny?')" role="button" class="btn btn-danger">Deny</a>
+                </td>
             </tr>
         </th:block>
     </table>
