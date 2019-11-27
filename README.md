@@ -1,5 +1,5 @@
-# coursesystem
-3. modulopgave
+# Coursesystem
+## 3. modulopgave
 
 Dette system bruges til at styre tilmelding til kurser.
 Studerende kan ansøge om at komme på et kursus.
@@ -9,5 +9,5 @@ Undervisere kan oprette nye kurser.
 Systemet taler sammen med et REST api over allerede eksisterende kurser og undervisere.
 
 
-Systemet er lavet ved hjælp af Spring boot og et mvc pattern.
+Systemet er lavet ved hjælp af Spring Boot og et MVC pattern.
 Login er lavet ved hjælp af Spring Security.
