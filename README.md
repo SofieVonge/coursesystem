@@ -13,4 +13,4 @@ Systemet er lavet ved hjælp af Spring Boot og et MVC pattern.
 Login er lavet ved hjælp af Spring Security.
 
 
-Systemet kan kun køre lokalt. Det bruger en MySQL-database med en dedikeret bruger (se oplysninger om port, brugernavn og adgangskode i properties-filen). Første gang programmet kører, skal ddl-auto sættes til update for at skabe databasen ved hjælp af JPA.
+Systemet hostes ikke. Det bruger en MySQL-database med en dedikeret bruger (se oplysninger om port, brugernavn og adgangskode i properties-filen). Første gang programmet kører, skal ddl-auto sættes til update for at skabe databasen ved hjælp af JPA.
